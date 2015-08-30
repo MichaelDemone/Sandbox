@@ -4,8 +4,6 @@ using System.Collections;
 public class Item : MonoBehaviour{
 
 	// General
-	private static bool init = false;
-
 	public bool item, weapon;
 	public int maxStackSize, numberOfDrops;
 	public Sprite equipped, inventorySprite;
@@ -26,11 +24,22 @@ public class Item : MonoBehaviour{
 		Inventory.equipped = gameObject;
 		if (item) {
 			//Inventory.hitting = weapon;
-			Inventory.placing = true;
+			Inventory.equippedIsForPlacing = true;
 		} else if (weapon) {
 			//Inventory.hitting = weapon;
-			Inventory.placing = true;
+			Inventory.equippedIsForPlacing = true;
 		}
+	}
+
+	public void drop() {
+
+		GameObject collectable = (GameObject)Dictionary.get ("Collectable");
+		
+		collectable.GetComponent<SpriteRenderer> ().sprite = GetComponent<SpriteRenderer> ().sprite;
+		collectable.GetComponent<Collect> ().objectThisRepresents = Dictionary.get (GetComponent<Item>().name);
+		GameObject.Instantiate (collectable, transform.position, Quaternion.identity);
+
+
 	}
 	
 }

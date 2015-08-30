@@ -8,10 +8,11 @@ public class Movement : MonoBehaviour {
 	private float jumpSpeed = 5;
 	private bool onSomething = false;
 	private GameObject inventoryUI;
-
+	private float onSomethingTest;
 	// Use this for initialization
 	void Start () {
 		inventoryUI = GameObject.Find ("Inventory");
+		onSomethingTest = Time.time;
 	}
 	
 	// Update is called once per frame
@@ -42,6 +43,11 @@ public class Movement : MonoBehaviour {
 			GetComponent<Animator>().SetBool( "mining", false );
 		}
 
+		if (Time.time - onSomethingTest > 0.25) {
+			OnTriggerExit2D(null);
+			onSomethingTest = Time.time;
+		}
+
 	}
 
 	//Increase n towards target speeeeed
@@ -58,11 +64,13 @@ public class Movement : MonoBehaviour {
 	}
 	
 	private void OnTriggerEnter2D(Collider2D other) {
-		onSomething = true;
+		if(!other.isTrigger)
+			onSomething = true;
 	}
 	
 	private void OnTriggerStay2D(Collider2D other) {
-		onSomething = true;
+		if(!other.isTrigger)
+			onSomething = true;
 	}
 
 	private void OnTriggerExit2D(Collider2D other) {

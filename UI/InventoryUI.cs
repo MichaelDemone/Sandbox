@@ -72,7 +72,7 @@ public class InventoryUI : MonoBehaviour {
 	}
 
 	public void increaseNumberOfItems(int slotNumber, int newSize) {
-		if(!menuOpen && slotNumber > 8)
+		if(!menuOpen && slotNumber > 8 || newSize == 1)
 			imageNums [slotNumber].GetComponent<Text> ().text = "";
 		else
 			imageNums [slotNumber].GetComponent<Text> ().text = newSize + "";
@@ -109,8 +109,12 @@ public class InventoryUI : MonoBehaviour {
 			else
 				images[i].GetComponent<Image>().sprite = blank;
 
-			if(Inventory.itemAmount[i] != 0)
-				imageNums[i].GetComponent<Text>().text = Inventory.itemAmount[i] + "";
+			if(Inventory.itemAmount[i] != 0) {
+				if(Inventory.itemAmount[i] == 1)
+					imageNums[i].GetComponent<Text>().text = Inventory.itemAmount[i] + "";
+				else
+					imageNums[i].GetComponent<Text>().text = "";
+			}
 		}
 	}
 	

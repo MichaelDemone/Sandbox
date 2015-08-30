@@ -5,12 +5,13 @@ using UnityEngine.UI;
 public class Inventory : MonoBehaviour {
 
 
-	public static bool hitting = true, placing = false;
+	public static bool hitting = true, equippedIsForPlacing = false;
 	public static GameObject equipped;
 	public static GameObject[] inventory;
 	public static int[] itemAmount;
 
-	private bool placingObject = false;
+	private GameObject tileParent;
+	private bool currentlyPlacingAnObject = false;
 	private float placeTime;
 	private KeyCode[] codes;
 
@@ -37,6 +38,8 @@ public class Inventory : MonoBehaviour {
 
 		placeTime = Time.time;
 		inventoryUI = GameObject.Find ("Inventory").GetComponent<InventoryUI>();
+		tileParent = GameObject.Find ("Ground");
+
 	}
 	
 	// Update is called once per frame
@@ -49,8 +52,8 @@ public class Inventory : MonoBehaviour {
 			}
 		}
 
-		if (placing && Input.GetMouseButton (1) && !placingObject) {
-			placingObject = true;
+		if (equippedIsForPlacing && Input.GetMouseButton (1) && !currentlyPlacingAnObject) {
+			currentlyPlacingAnObject = true;
 
 			Vector3 pos = Input.mousePosition;
 			pos.z = -25;
@@ -67,10 +70,16 @@ public class Inventory : MonoBehaviour {
 				int xPos = Mathf.RoundToInt (pos.x);
 				int yPos = Mathf.RoundToInt (pos.y);
 
-				GameObject.Instantiate (equipped, new Vector3(xPos, yPos, 0), Quaternion.identity);
+				GameObject go = (GameObject) GameObject.Instantiate (equipped, new Vector3(xPos, yPos, 0), Quaternion.identity);
+
+				if(go.CompareTag("Tile")) {
+					go.transform.parent = tileParent.transform;
+				}
+
+
 			}
-		} else if (placingObject && Time.time - placeTime > 0.25) {
-			placingObject = false;
+		} else if (currentlyPlacingAnObject && Time.time - placeTime > 0.25) {
+			currentlyPlacingAnObject = false;
 		}
 
 	}

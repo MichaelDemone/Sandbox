@@ -21,26 +21,18 @@ public class Mining : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (strength == 0) {
-			throwPeice();
+			GetComponent<Item>().drop();
 			GameObject.Destroy (this.gameObject);
 		}
 	}
-
-	void throwPeice() {
-		Vector3 thisPos = transform.position;
-		GameObject collectable = (GameObject)Dictionary.get ("Collectable");
-		if (collectable == null)
-			Debug.Log ("collectable is null");
-		collectable.GetComponent<SpriteRenderer> ().sprite = GetComponent<SpriteRenderer> ().sprite;
-		collectable.GetComponent<Collect> ().objectThisRepresents = Dictionary.get (gameObject.GetComponent<Item> ().name);
-		GameObject.Instantiate (collectable, thisPos, Quaternion.identity);
-	}
-
+	
 	void OnMouseOver() {
 
 		if (Inventory.hitting && Input.GetMouseButton (0)) {
 
 			Vector3 vectorDifference = this.transform.position - player.transform.position;
+
+			// Possibly replace this with a trigger
 			if (vectorDifference.magnitude < miningDistance && Time.time - timeLastHit > timeBetweenBreaking) {
 				strength -= player.GetComponent<Stats> ().strength;
 				timeLastHit = Time.time;

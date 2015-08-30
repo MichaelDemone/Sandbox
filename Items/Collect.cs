@@ -24,12 +24,13 @@ public class Collect: MonoBehaviour {
 			registered = true;
 			Inventory.addItem(objectThisRepresents, gameObject);
 		}
-
-		bool sameType = other.GetComponent<Collect> ().objectThisRepresents == objectThisRepresents;
-		if (!beingDestroyed && other.CompareTag ("Collectable") && sameType) {
-			other.GetComponent<Collect>().SendMessage("BeingDestroyed");
-			amount += other.GetComponent<Collect>().amount;
-			GameObject.Destroy(other.gameObject);
+		if (other.GetComponent<Collect> () != null) {
+			bool sameType = other.GetComponent<Collect> ().objectThisRepresents == objectThisRepresents;
+			if (!beingDestroyed && other.CompareTag ("Collectable") && sameType) {
+				other.GetComponent<Collect> ().SendMessage ("BeingDestroyed");
+				amount += other.GetComponent<Collect> ().amount;
+				GameObject.Destroy (other.gameObject);
+			}
 		}
 	}
 	void OnTriggerStay2D(Collider2D other) {
