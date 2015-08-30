@@ -5,8 +5,10 @@ public class CreateMap : MonoBehaviour {
 
 	public GameObject dirt, copper;
 	public int seed = 1234;
-	//Random rnd = new Random(seed);
 	bool thing = false;
+
+	private GameObject player;
+
 
 	// Use this for initialization
 	void Start () {
@@ -33,12 +35,15 @@ public class CreateMap : MonoBehaviour {
 			}
 			previousYPos += columnHeight;
 		}
-
+		player = GameObject.Find ("Player");
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+		if (Mathf.RoundToInt (player.transform.position.x) % 100 == 0) {
+			StartCoroutine("loadPeices");
+			StartCoroutine("unloadPeices");
+		}
 	}
 
 	//adds or subtracts 1 or 2 blocks to the height
@@ -57,7 +62,27 @@ public class CreateMap : MonoBehaviour {
 			return (-1 * amnt);
 
 		}
+	}
 
+	public IEnumerator loadPeices() {
+		int playerXPosition = Mathf.RoundToInt(player.transform.position.x);
+		for (int i = playerXPosition + 100; i < playerXPosition + 200; i++) {
+			for(int j = -20; j < 0; j++) {
+				GameObject.Instantiate(dirt, new Vector3(i, j, 0), Quaternion.identity);
+				yield return null;
+			}
+		}
+	}
+
+	public IEnumerator unloadPeices() {
+		int playerXPosition = Mathf.RoundToInt(player.transform.position.x);
+		for (int i = playerXPosition - 100; i > playerXPosition - 200; i--) {
+			for(int j = -20; j < 0; j++) {
+				Collider2D box = Physics2D.OverlapPoint(new Vector2(i, j));
+				GameObject.Destroy(box.gameObject);
+				yield return null;
+			}
+		}
 	}
 
 }

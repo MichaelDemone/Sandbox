@@ -34,7 +34,6 @@ public class Movement : MonoBehaviour {
 			inventoryUI.GetComponent<InventoryUI>().showOrHideInventory();
 		}
 
-
 		this.GetComponent<Rigidbody2D> ().velocity = speed;
 
 		if (Input.GetMouseButton(0)){
