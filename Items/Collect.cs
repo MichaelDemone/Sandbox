@@ -4,9 +4,10 @@ using System.Collections;
 public class Collect: MonoBehaviour {
 
 	public GameObject objectThisRepresents;
+	public int amount = 1;
 
 	private bool registered = false;
-
+	bool beingDestroyed = false;
 
 	// Use this for initialization
 	void Start () {
@@ -21,15 +22,23 @@ public class Collect: MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D other) {
 		if (other.CompareTag ("Player") && !registered) {
 			registered = true;
-			GameObject.Find("Inventory").GetComponent<Inventory>().addItem(objectThisRepresents);
-			GameObject.Destroy(this.gameObject);
+			Inventory.addItem(objectThisRepresents, gameObject);
+		}
+
+		bool sameType = other.GetComponent<Collect> ().objectThisRepresents == objectThisRepresents;
+		if (!beingDestroyed && other.CompareTag ("Collectable") && sameType) {
+			other.GetComponent<Collect>().SendMessage("BeingDestroyed");
+			amount += other.GetComponent<Collect>().amount;
+			GameObject.Destroy(other.gameObject);
 		}
 	}
 	void OnTriggerStay2D(Collider2D other) {
 		if (other.CompareTag ("Player") && !registered) {
 			registered = true;
-			GameObject.Find("Inventory").GetComponent<Inventory>().addItem(objectThisRepresents);
-			GameObject.Destroy(this.gameObject);
+			Inventory.addItem(objectThisRepresents, gameObject);
 		}
+	}
+	void BeingDestroyed() {
+		beingDestroyed = true;
 	}
 }

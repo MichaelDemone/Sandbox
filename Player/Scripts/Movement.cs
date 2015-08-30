@@ -7,11 +7,11 @@ public class Movement : MonoBehaviour {
 	private float targetSpeed = 8;
 	private float jumpSpeed = 5;
 	private bool onSomething = false;
-	private GameObject inventory;
+	private GameObject inventoryUI;
 
 	// Use this for initialization
 	void Start () {
-		inventory = GameObject.Find ("Inventory");
+		inventoryUI = GameObject.Find ("Inventory");
 	}
 	
 	// Update is called once per frame
@@ -30,7 +30,7 @@ public class Movement : MonoBehaviour {
 		}
 
 		if (Input.GetKeyDown (KeyCode.Escape)) {
-			inventory.GetComponent<Inventory>().showOrHideInventory();
+			inventoryUI.GetComponent<InventoryUI>().showOrHideInventory();
 		}
 
 

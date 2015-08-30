@@ -4,95 +4,48 @@ using UnityEngine.UI;
 
 public class Inventory : MonoBehaviour {
 
-	public Sprite blank, hotbar, fullInventory;
-	public bool hitting = true, placing = false;
-	public GameObject equipped;
-	
-	private int[] intInfo;
-	private GameObject[] images, imageNums;
-	private bool menuOpen = false, placingObject = false;
+
+	public static bool hitting = true, placing = false;
+	public static GameObject equipped;
+	public static GameObject[] inventory;
+	public static int[] itemAmount;
+
+	private bool placingObject = false;
 	private float placeTime;
-	
-	private Image[] images2;
-	private Toggle[] toggles;
-	private Toggle selected;
 	private KeyCode[] codes;
 
-	private GameObject[] information;
+	private static InventoryUI inventoryUI;
+	private const int INVENTORY_SIZE = 81;
 
 	// Use this for initialization
 	void Start () {
-		// Initializing images
-		ArrayList imagesTemp = new ArrayList ();
-		GameObject image;
-		for (int i = 0;;i++) {
-			image = GameObject.Find("Inventory Image (" + i + ")");
-			if(image != null) {
-				imagesTemp.Add(image);
-			}
-			else
-				break;
-		}
-
-		images = new GameObject[imagesTemp.Count];
-		for (int i = 0; i < imagesTemp.Count; i++) {
-			images[i] = (GameObject) imagesTemp.ToArray()[i];
-		}
-
-		// Initialize image numbers
-		ArrayList imageNumsTemp = new ArrayList ();
-		GameObject imageNum;
-		for (int i = 0;;i++) {
-			imageNum = GameObject.Find("Item Number (" + i + ")");
-			if(imageNum != null) {
-				imageNumsTemp.Add(imageNum);
-				imageNum.GetComponent<Text>().text = "";
-			}
-			else
-				break;
-		}
-		
-		imageNums = new GameObject[imageNumsTemp.Count];
-		for (int i = 0; i < imageNumsTemp.Count; i++) {
-			imageNums[i] = (GameObject) imageNumsTemp.ToArray()[i];
-		}
 
 		// Initializing information about what is in inventory
-		information = new GameObject[images.Length];
-		for (int i = 0; i < information.Length; i++) {
-			information[i] = null;
+		inventory = new GameObject[INVENTORY_SIZE];
+		for (int i = 0; i < inventory.Length; i++) {
+			inventory[i] = null;
 		}
 
 		// Initializing information about how many items are in each
-		intInfo = new int[images.Length];
-		for (int i = 0; i < information.Length; i++) {
-			intInfo[i] = 0;
+		itemAmount = new int[INVENTORY_SIZE];
+		for (int i = 0; i < inventory.Length; i++) {
+			itemAmount[i] = 0;
 		}
-
-		// Toggles and images
-		images2 = GameObject.Find ("Inventory Images").GetComponentsInChildren<Image> ();
-		toggles = GameObject.Find ("Inventory Images").GetComponentsInChildren<Toggle> ();
 
 		codes = new KeyCode[] {KeyCode.Alpha1, KeyCode.Alpha2, KeyCode.Alpha3, KeyCode.Alpha4
 			, KeyCode.Alpha5, KeyCode.Alpha6, KeyCode.Alpha7, KeyCode.Alpha8, KeyCode.Alpha9};
 
 		placeTime = Time.time;
+		inventoryUI = GameObject.Find ("Inventory").GetComponent<InventoryUI>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
 
-		if (selected != null) {
-			selected.isOn = true;
-		}
-
 		for (int i = 0; i < codes.Length; i++) {
 			if(Input.GetKeyDown(codes[i])) {
-				if(images2[i].sprite.name.Equals("Clear")) {
-					return;
-				}
-				toggles[i].isOn = true;
-				return;
+				inventoryUI.equip(i);
+				equipped = inventory[i];
 			}
 		}
 
@@ -122,92 +75,69 @@ public class Inventory : MonoBehaviour {
 
 	}
 
-	public void addItem(GameObject item) {
+	public static void addItem(GameObject item, GameObject collectable) {
 
-		for(int i = 0; i < images.Length; i++) {
-			if(information[i] != null && information[i].Equals(item)){
-				increaseNumberOfItems(item, i);
-				return;
-			}
-			else if(information[i] == null) {
-				if(!menuOpen && i > 9)
-					images[i].GetComponent<Image>().sprite = blank;
-				else
-					images[i].GetComponent<Image>().sprite = item.GetComponent<Item>().inventorySprite;
-				information[i] = item;
-				increaseNumberOfItems(item, i);
-				return;
-			}
-		}
-	}
+		bool foundEmpty = false;
+		int emptyPosition = -1;
 
-	private void increaseNumberOfItems(GameObject item, int num) {
-		intInfo [num]++;
-		if(!menuOpen && num > 9)
-			imageNums [num].GetComponent<Text> ().text = "";
-		else
-			imageNums [num].GetComponent<Text> ().text = intInfo [num] + "";
-	}
+		// Go through inventory
+		for(int i = 0; i < INVENTORY_SIZE; i++) {
 
-
-	// Hiding and showing inventory
-	public void showOrHideInventory() {
-		if(menuOpen) {
-			hideInventory();
-			menuOpen = false;
-		}
-		else {
-			showInventory();
-			menuOpen = true;
-		}		
-	}
-
-	private void hideInventory() {
-		GetComponent<Image> ().sprite = hotbar;
-
-		for (int i = 9; i < images.Length; i++) {
-			images[i].GetComponent<Image>().sprite = blank;
-			imageNums[i].GetComponent<Text>().text = "";
-		}
-	}
-
-	private void showInventory() {
-		GetComponent<Image> ().sprite = fullInventory;
-
-		for(int i = 9; i < images.Length; i++) {
-			images[i].GetComponent<Image>().sprite = information[i].GetComponent<Item>().inventorySprite;
-			if(intInfo[i] != 0)
-				imageNums[i].GetComponent<Text>().text = intInfo[i] + "";
-		}
-	}
-
-	// Toggles, this is called from the inventory images
-	void toggleChanged() {
-
-		for (int i = 0; i < images2.Length; i++) {
-			if(toggles[i].isOn && toggles[i] != selected) {
-
-				if(!images2[i].sprite.name.Equals("Clear")) {
-
-					if(selected != null) {
-						ColorBlock cb2 = selected.colors;
-						cb2.normalColor = Color.white;
-						selected.colors = cb2;
-						selected.isOn = false;
-					}
-
-					information[i].GetComponent<Item>().selectItem();
-					
-					// Make selected highlighted green
-					ColorBlock cb = toggles[i].colors;
-					cb.normalColor = Color.green;
-					toggles[i].colors = cb;
-
-					selected = toggles[i];
+			// If item in slot equals current item, increase amount of it
+			if(inventory[i] != null && inventory[i].Equals(item)){
+				// If it can't be increased, keep going until a new 
+				// open spot is found
+				if(increaseNumberOfItems(item, collectable, i)) {
+					GameObject.Destroy(collectable);
 					return;
 				}
 			}
+			// Records the first empty spot
+			else if(!foundEmpty && inventory[i] == null) {
+				foundEmpty = true;
+				emptyPosition = i;
+			}
 		}
+
+		// Puts item into first empty spot
+		if (foundEmpty) {
+			Sprite inventorySprite = item.GetComponent<Item>().inventorySprite;
+			inventoryUI.addItem(inventorySprite, emptyPosition);
+
+			inventory[emptyPosition] = item;
+			increaseNumberOfItems(item, collectable, emptyPosition);
+			GameObject.Destroy(collectable);
+			return;
+		}
+
 	}
 
+	private static bool increaseNumberOfItems(GameObject item, GameObject collectable, int slotNumber) {
+		int maxStackSize = item.GetComponent<Item> ().maxStackSize;
+		if (itemAmount [slotNumber] == maxStackSize) {
+			return false;
+		} else if (itemAmount [slotNumber] > maxStackSize) {
+			Debug.Log ("Item amount exceeded max amount.");
+			return false;
+		} else {
+			int amountInCollectable = collectable.GetComponent<Collect>().amount;
+			int amountInInventory = itemAmount[slotNumber];
+
+			if(amountInCollectable + amountInInventory > maxStackSize) {
+				int amountBeingAdded = maxStackSize - amountInInventory;
+				collectable.GetComponent<Collect>().amount -= amountBeingAdded;
+				amountInInventory += amountBeingAdded;
+				itemAmount[slotNumber] = amountInInventory;
+				addItem(item, collectable);
+
+			} else {
+				amountInInventory += amountInCollectable;
+				itemAmount[slotNumber] = amountInInventory;
+			}
+
+			inventoryUI.increaseNumberOfItems (slotNumber, amountInInventory);
+
+			return true;
+		}
+	}
 }
