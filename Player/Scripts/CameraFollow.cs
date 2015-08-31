@@ -3,12 +3,12 @@ using System.Collections;
 
 public class CameraFollow : MonoBehaviour {
 
-	GameObject player;
+	public GameObject player;
 
 	private float zPos;
 	// Use this for initialization
 	void Start () {
-		player = GameObject.Find ("Player");
+		player = GameObject.Find ("Player2");
 		zPos = this.transform.position.z;
 
 	}

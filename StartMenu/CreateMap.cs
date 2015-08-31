@@ -16,7 +16,7 @@ public class CreateMap : MonoBehaviour {
 	void Start () {
 
 		Ground =  GameObject.Find("Ground");
-		player = GameObject.Find ("Player");
+		player = GameObject.Find ("Player2");
 
 		map = new Hashtable();
 		Random.seed = seed;
@@ -50,15 +50,19 @@ public class CreateMap : MonoBehaviour {
 			previousYPosR += columnHeight;
 		}
 	
+
+
 		for (float i = -100; i < 100; i += widthOfGroundPiece){
 			for (float j = -20; j < maxY; j += widthOfGroundPiece){
 				string tile = (string) map[new Vector3(i,j,0)];
 				if(tile != null) {
 					GameObject obj = (GameObject) GameObject.Instantiate(Dictionary.get (tile), new Vector3(i,j,0), Quaternion.identity);
+					obj.layer = LayerMask.NameToLayer("Ground");
 					obj.transform.SetParent(Ground.transform);
 				}
 			}
 		}
+		Debug.Log("Start Time: " + Time.deltaTime);
 	}
 	
 	// Update is called once per frame
@@ -67,6 +71,7 @@ public class CreateMap : MonoBehaviour {
 			StartCoroutine("loadPeices");
 			StartCoroutine("unloadPeices");
 		}
+		Debug.Log("Update Time: " + Time.deltaTime);
 	}
 
 	//adds or subtracts 1 or 2 blocks to the height
@@ -86,7 +91,7 @@ public class CreateMap : MonoBehaviour {
 	public IEnumerator loadPeices() {
 
 		int playerXPosition = Mathf.RoundToInt(player.transform.position.x);
-		bool goingRight = player.GetComponent<Rigidbody2D>().velocity.x > 0;
+		bool goingRight = player.GetComponent<PlayerControl>().goingRight;
 
 		Vector3 position;
 
