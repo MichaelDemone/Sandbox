@@ -4,8 +4,8 @@ using System.Collections;
 public class Movement : MonoBehaviour {
 	
 	public float acceleration, currentSpeed;
-	private float targetSpeed = 8;
-	private float jumpSpeed = 5;
+	private float targetSpeed = 20;
+	private float jumpSpeed = 15;
 	private bool onSomething = false;
 	private GameObject inventoryUI;
 	private float onSomethingTest;
