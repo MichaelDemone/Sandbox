@@ -8,6 +8,7 @@ public class Item : MonoBehaviour{
 	public int maxStackSize, numberOfDrops;
 	public Sprite equipped, inventorySprite;
 	public new string name;
+	public string invName;
 
 
 	// Weapons
@@ -36,7 +37,7 @@ public class Item : MonoBehaviour{
 		GameObject collectable = (GameObject)Dictionary.get ("Collectable");
 		
 		collectable.GetComponent<SpriteRenderer> ().sprite = GetComponent<SpriteRenderer> ().sprite;
-		collectable.GetComponent<Collect> ().objectThisRepresents = Dictionary.get (GetComponent<Item>().name);
+		collectable.GetComponent<Collect> ().objectThisRepresents = Dictionary.get (invName);
 		GameObject.Instantiate (collectable, transform.position, Quaternion.identity);
 
 
