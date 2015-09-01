@@ -51,7 +51,6 @@ public class CreateMap : MonoBehaviour {
 		}
 	
 
-
 		for (float i = -100; i < 100; i += widthOfGroundPiece){
 			for (float j = -20; j < maxY; j += widthOfGroundPiece){
 				string tile = (string) map[new Vector3(i,j,0)];
@@ -62,7 +61,6 @@ public class CreateMap : MonoBehaviour {
 				}
 			}
 		}
-		Debug.Log("Start Time: " + Time.deltaTime);
 	}
 	
 	// Update is called once per frame
@@ -71,7 +69,6 @@ public class CreateMap : MonoBehaviour {
 			StartCoroutine("loadPeices");
 			StartCoroutine("unloadPeices");
 		}
-		Debug.Log("Update Time: " + Time.deltaTime);
 	}
 
 	//adds or subtracts 1 or 2 blocks to the height
