@@ -4,9 +4,9 @@ using System.Collections;
 public class Movement : MonoBehaviour {
 	
 	public float acceleration, currentSpeed;
-	private float targetSpeed = 20;
+	private float targetSpeed = 5;
 	private float jumpSpeed = 5;
-	private bool onSomething = false;
+	private bool grounded = false;
 	private GameObject inventoryUI;
 	private float onSomethingTest;
 	// Use this for initialization
@@ -26,7 +26,7 @@ public class Movement : MonoBehaviour {
 			speed.x = IncrementTowards(speed.x, targetSpeed, acceleration);
 		}
 
-		if (Input.GetKey(KeyCode.Space) && onSomething) {
+		if (Input.GetKey(KeyCode.Space) && grounded) {
 			speed.y = jumpSpeed;
 		}
 
@@ -64,15 +64,21 @@ public class Movement : MonoBehaviour {
 	
 	private void OnTriggerEnter2D(Collider2D other) {
 		if(!other.isTrigger)
-			onSomething = true;
+			grounded = true;
 	}
 	
 	private void OnTriggerStay2D(Collider2D other) {
 		if(!other.isTrigger)
-			onSomething = true;
+			grounded = true;
 	}
 
 	private void OnTriggerExit2D(Collider2D other) {
-		onSomething = false;
+		grounded = false;
 	}
+
+
+
+
+
+
 }
