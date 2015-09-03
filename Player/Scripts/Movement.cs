@@ -5,7 +5,7 @@ public class Movement : MonoBehaviour {
 	
 	public float acceleration, currentSpeed;
 	private float targetSpeed = 20;
-	private float jumpSpeed = 15;
+	private float jumpSpeed = 5;
 	private bool onSomething = false;
 	private GameObject inventoryUI;
 	private float onSomethingTest;
