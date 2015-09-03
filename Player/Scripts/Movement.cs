@@ -21,9 +21,11 @@ public class Movement : MonoBehaviour {
 		Vector2 speed = new Vector2 (this.GetComponent<Rigidbody2D> ().velocity.x, this.GetComponent<Rigidbody2D> ().velocity.y);
 		if (Input.GetKey (KeyCode.A)) {
 			speed.x = IncrementTowards(speed.x, -1*targetSpeed, acceleration);
+			transform.localRotation = Quaternion.Euler(0,180,0);
 		}
 		if (Input.GetKey(KeyCode.D)) {
 			speed.x = IncrementTowards(speed.x, targetSpeed, acceleration);
+			transform.localRotation = Quaternion.Euler(0,0,0);
 		}
 
 		if (Input.GetKey(KeyCode.Space) && grounded) {
