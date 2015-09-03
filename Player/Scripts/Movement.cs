@@ -36,11 +36,11 @@ public class Movement : MonoBehaviour {
 
 		this.GetComponent<Rigidbody2D> ().velocity = speed;
 
-		if (Input.GetMouseButton(0)){
+		/*if (Input.GetMouseButton(0)){
 			GetComponent<Animator>().SetBool( "mining", true );
 		}else{
 			GetComponent<Animator>().SetBool( "mining", false );
-		}
+		}*/
 
 		if (Time.time - onSomethingTest > 0.25) {
 			OnTriggerExit2D(null);
