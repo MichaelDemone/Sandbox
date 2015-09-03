@@ -98,7 +98,7 @@ public class InventoryUI : MonoBehaviour {
 			imageNums[i].GetComponent<Text>().text = "";
 		}
 
-		GameObject saveWorldButton = GameObject.Find ("Save World");
+		GameObject saveWorldButton = GameObject.Find ("Menu Button");
 		saveWorldButton.transform.localScale = new Vector3 (0, 0, 0);
 	}
 	
@@ -119,7 +119,7 @@ public class InventoryUI : MonoBehaviour {
 					imageNums[i].GetComponent<Text>().text = "";
 			}
 		}
-		GameObject saveWorldButton = GameObject.Find ("Save World");
+		GameObject saveWorldButton = GameObject.Find ("Menu Button");
 		saveWorldButton.transform.localScale = new Vector3 (1, 1, 0);
 
 	}

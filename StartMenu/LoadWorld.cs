@@ -55,12 +55,11 @@ public class LoadWorld : MonoBehaviour {
 			stream = File.Create (vectorSave);
 			stream2 = File.Create (tileSave);
 
-
 		} else {
 			File.Delete(vectorSave);
 			File.Delete(tileSave);
 			stream = new FileStream(vectorSave, FileMode.Create);
-			stream2 = new FileStream(vectorSave, FileMode.Create);
+			stream2 = new FileStream(tileSave, FileMode.Create);
 		}
 
 		try {
