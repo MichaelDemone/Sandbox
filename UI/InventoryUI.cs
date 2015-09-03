@@ -97,6 +97,9 @@ public class InventoryUI : MonoBehaviour {
 			images[i].GetComponent<Image>().sprite = blank;
 			imageNums[i].GetComponent<Text>().text = "";
 		}
+
+		GameObject saveWorldButton = GameObject.Find ("Save World");
+		saveWorldButton.transform.localScale = new Vector3 (0, 0, 0);
 	}
 	
 	private void showInventory() {
@@ -116,6 +119,9 @@ public class InventoryUI : MonoBehaviour {
 					imageNums[i].GetComponent<Text>().text = "";
 			}
 		}
+		GameObject saveWorldButton = GameObject.Find ("Save World");
+		saveWorldButton.transform.localScale = new Vector3 (1, 1, 0);
+
 	}
 	
 	// Toggles, this is called from the inventory images

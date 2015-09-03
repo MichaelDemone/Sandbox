@@ -6,8 +6,9 @@ public class Mining : MonoBehaviour {
 	public int strength;
 	public Sprite[] breakingStages;
 	public float timeBetweenBreaking;
-	public int miningDistance;
 
+
+	private float miningDistance;
 	private GameObject player;
 	private float timeLastHit;
 
@@ -15,7 +16,7 @@ public class Mining : MonoBehaviour {
 	void Start () {
 		player = GameObject.Find ("Player");
 		timeLastHit = 0;
-
+		miningDistance = player.GetComponent<Stats> ().miningDistance;
 	}
 	
 	// Update is called once per frame

@@ -8,7 +8,7 @@ public class CameraFollow : MonoBehaviour {
 	private float zPos;
 	// Use this for initialization
 	void Start () {
-		player = GameObject.Find ("Player2");
+		//player = GameObject.Find ("Player2");
 		zPos = this.transform.position.z;
 
 	}

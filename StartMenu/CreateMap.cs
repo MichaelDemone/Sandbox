@@ -9,49 +9,55 @@ public class CreateMap : MonoBehaviour {
 	private int maxY = 0;
 	private float previousYPosR, previousYPosL;
 	private GameObject player, Ground;
-	public Hashtable map;//the map
+	public static Hashtable map;//the map
 	private float widthOfGroundPiece = 1;
 
 	// Use this for initialization
 	void Start () {
 
 		Ground =  GameObject.Find("Ground");
-		player = GameObject.Find ("Player2");
+		player = GameObject.Find ("Player");
 
-		map = new Hashtable();
-		Random.seed = seed;
+		if (map == null) {
+			map = new Hashtable ();
+			Random.seed = seed;
 
-		// This is the starting position
-		Vector3 position = new Vector3 (-1000, -20, 0);
+			// This is the starting position
+			Vector3 position = new Vector3 (-1000, -20, 0);
 
-		previousYPosR = 0;
+			previousYPosR = 0;
 
-		// Continue creating peices until the x position reaches 20
-		for (float i = -1000; i < 1000; i += widthOfGroundPiece) {
+			// Continue creating peices until the x position reaches 20
+			for (float i = -1000; i < 1000; i += widthOfGroundPiece) {
 			
-			int columnHeight = selectDirection();
-			if (i == -1000) previousYPosL = columnHeight;
+				int columnHeight = selectDirection ();
+				if (i == -1000)
+					previousYPosL = columnHeight;
 			
-			for  (float j = -20; j < previousYPosR + columnHeight; j += widthOfGroundPiece) {
-				position = new Vector3(i,j,0);
-				//if(j % 5 == 0){
-					map.Add(position,"Dirt");
-				//}else{
-				//	map.Add(position,"Copper");
-				//}
+				for (float j = -20; j < previousYPosR + columnHeight; j += widthOfGroundPiece) {
+					position = new Vector3 (i, j, 0);
+					//if(j % 5 == 0){
+					map.Add (position, "Dirt");
+					//}else{
+					//	map.Add(position,"Copper");
+					//}
 
-				thing = !thing;
+					thing = !thing;
 				
-				if (columnHeight + previousYPosR > maxY) maxY += columnHeight;
+					if (columnHeight + previousYPosR > maxY)
+						maxY += columnHeight;
 				
+				}
+				map.Remove (position);
+				map.Add (position, "DirtWGrass");
+				previousYPosR += columnHeight;
 			}
-			 map.Remove(position);
-			 map.Add(position,"DirtWGrass");
-			previousYPosR += columnHeight;
+		} else {
+			Debug.Log("Map is not null");
+			maxY = 100;
 		}
-	
 
-		for (float i = -100; i < 100; i += widthOfGroundPiece){
+		for (float i = -199; i < 100; i += widthOfGroundPiece){
 			for (float j = -20; j < maxY; j += widthOfGroundPiece){
 				string tile = (string) map[new Vector3(i,j,0)];
 				if(tile != null) {
@@ -88,8 +94,12 @@ public class CreateMap : MonoBehaviour {
 	public IEnumerator loadPeices() {
 
 		int playerXPosition = Mathf.RoundToInt(player.transform.position.x);
-		bool goingRight = player.GetComponent<PlayerControl>().goingRight;
-
+		bool goingRight;
+		if (player.name.Equals ("Player2")) {
+			goingRight = player.GetComponent<PlayerControl> ().goingRight;
+		} else {
+			goingRight = player.GetComponent<Rigidbody2D> ().velocity.x > 0;
+		}
 		Vector3 position;
 
 		if(goingRight) {
@@ -158,52 +168,31 @@ public class CreateMap : MonoBehaviour {
 		if(goingRight) {
 			for (float i = playerXPosition - 100; i > playerXPosition - 200; i -= widthOfGroundPiece) {
 				for(float j = -40; j < 300; j += widthOfGroundPiece) {
-					Vector2 pos = new Vector3(i,j,0);
-					Collider2D box = Physics2D.OverlapPoint(pos);
-
-					if(box != null) {
-						if(map.Contains(pos)) {
-							map.Remove(pos);
-						}
-						Item script;
-						if((script = box.gameObject.GetComponent<Item>()) != null)
-							map.Add(pos, script.name);
-						else
-							Debug.Log("null stuff");
-						GameObject.Destroy(box.gameObject);
-					} else {
-						if(map.Contains(pos)) {
-							map.Remove(pos);
-						}
-					}
+					savePointToMap(i,j,0);
 				}
-
 			}
 		} else {
 			for (float i = playerXPosition + 100; i < playerXPosition + 200; i += widthOfGroundPiece) {
-				for(float j = -40; j < 300; j += widthOfGroundPiece) {
-					Vector2 pos = new Vector3(i,j,0);
-					Collider2D box = Physics2D.OverlapPoint(new Vector2(i, j));
-					if(box != null) {
-						if(map.Contains(pos)) {
-							map.Remove(pos);
-						}
-						Item script;
-						if((script = box.gameObject.GetComponent<Item>()) != null)
-							map.Add(pos, script.name);
-						else
-							Debug.Log("null stuff");
-						GameObject.Destroy(box.gameObject);
-					} else {
-						if(map.Contains(pos)) {
-							map.Remove(pos);
-						}
-					}
-
+				for(float j = -20; j < 300; j += widthOfGroundPiece) {
+					savePointToMap(i,j,0);
 				}
-
 			}
 		}
 		yield return null;
+	}
+
+	private void savePointToMap(float i, float j, float k) {
+		Vector3 pos = new Vector3 (i, j, k);
+		Collider2D box = Physics2D.OverlapPoint(pos);
+		
+		if(map.Contains(pos)) {
+			map.Remove(pos);
+		}
+
+		Item script;
+		if(box != null && (script = box.gameObject.GetComponent<Item>()) != null) {
+			map.Add(pos, script.name);
+			GameObject.Destroy(box.gameObject);
+		}
 	}
 }
