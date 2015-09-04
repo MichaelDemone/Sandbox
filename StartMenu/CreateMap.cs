@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+[RequireComponent(typeof(GenerateTrees))]
+
+
 public class CreateMap : MonoBehaviour {
 
 	public GameObject dirt, copper;
@@ -23,7 +26,7 @@ public class CreateMap : MonoBehaviour {
 			Random.seed = seed;
 
 			// This is the starting position
-			Vector3 position = new Vector3 (-1000, -20, 0);
+			Vector3 position = new Vector3 (-1000, -40, 0);
 
 			previousYPosR = 0;
 
@@ -31,10 +34,11 @@ public class CreateMap : MonoBehaviour {
 			for (float i = -1000; i < 1000; i += widthOfGroundPiece) {
 			
 				int columnHeight = selectDirection ();
+				Debug.Log(columnHeight);
 				if (i == -1000)
 					previousYPosL = columnHeight;
 			
-				for (float j = -20; j < previousYPosR + columnHeight; j += widthOfGroundPiece) {
+				for (float j = -40; j < previousYPosR + columnHeight; j += widthOfGroundPiece) {
 					position = new Vector3 (i, j, 0);
 					//if(j % 5 == 0){
 					map.Add (position, "Dirt");
@@ -52,13 +56,16 @@ public class CreateMap : MonoBehaviour {
 				map.Add (position, "DirtWGrass");
 				previousYPosR += columnHeight;
 			}
+
+			//GenerateTrees.placeTrees(maxY);
+
 		} else {
 			Debug.Log("Map is not null");
 			maxY = 100;
 		}
 
 		for (float i = -199; i < 100; i += widthOfGroundPiece){
-			for (float j = -20; j < maxY; j += widthOfGroundPiece){
+			for (float j = -40; j < maxY; j += widthOfGroundPiece){
 				string tile = (string) map[new Vector3(i,j,0)];
 				if(tile != null) {
 					GameObject obj = (GameObject) GameObject.Instantiate(Dictionary.get (tile), new Vector3(i,j,0), Quaternion.identity);
@@ -117,7 +124,7 @@ public class CreateMap : MonoBehaviour {
 				position.x = i;
 				previousYPosR += selectDirection ();
 
-				for  (float j = -20; j < maxY; j += widthOfGroundPiece) {
+				for  (float j = -40; j < maxY; j += widthOfGroundPiece) {
 					position.y = j;
 
 					string tile = (string) map[new Vector3(i,j,0)];
@@ -143,7 +150,7 @@ public class CreateMap : MonoBehaviour {
 
 				previousYPosL += selectDirection ();
 				
-				for  (float j = -20; j < maxY; j += widthOfGroundPiece) {
+				for  (float j = -40; j < maxY; j += widthOfGroundPiece) {
 					position.y = j;
 
 					string tile = (string) map[position];

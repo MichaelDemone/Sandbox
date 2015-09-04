@@ -9,28 +9,38 @@ public class Movement : MonoBehaviour {
 	private bool grounded = false;
 	private GameObject inventoryUI;
 	private float onSomethingTest;
+	private CircleCollider2D circleCollider;
+
 	// Use this for initialization
 	void Start () {
 		inventoryUI = GameObject.Find ("Inventory");
 		onSomethingTest = Time.time;
+		circleCollider = GetComponent<CircleCollider2D>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
+	
 
 		Vector2 speed = new Vector2 (this.GetComponent<Rigidbody2D> ().velocity.x, this.GetComponent<Rigidbody2D> ().velocity.y);
 		if (Input.GetKey (KeyCode.A)) {
-			speed.x = IncrementTowards(speed.x, -1*targetSpeed, acceleration);
+			speed.x = -5;
 			transform.localRotation = Quaternion.Euler(0,180,0);
-		}
-		if (Input.GetKey(KeyCode.D)) {
-			speed.x = IncrementTowards(speed.x, targetSpeed, acceleration);
+		}else if (Input.GetKey(KeyCode.D)) {
+			speed.x = 5;
 			transform.localRotation = Quaternion.Euler(0,0,0);
+		}else{
+			speed.x = 0;
 		}
+
+
 
 		if (Input.GetKey(KeyCode.Space) && grounded) {
 			speed.y = jumpSpeed;
 		}
+	
+
+		GetComponent<Animator>().SetBool("moving",Mathf.Abs(speed.x) > 1);
 
 		if (Input.GetKeyDown (KeyCode.Escape)) {
 			inventoryUI.GetComponent<InventoryUI>().showOrHideInventory();
@@ -52,7 +62,7 @@ public class Movement : MonoBehaviour {
 	}
 
 	//Increase n towards target speeeeed
-	private float IncrementTowards(float currentSpeed, float targetSpeed, float acceleration) {
+	/*private float IncrementTowards(float currentSpeed, float targetSpeed, float acceleration) {
 
 		if (currentSpeed == targetSpeed) {
 			return currentSpeed; //return if at target
@@ -62,7 +72,7 @@ public class Movement : MonoBehaviour {
 			return (dir == Mathf.Sign(targetSpeed - currentSpeed))? currentSpeed: targetSpeed;// if n is passed target return target
 		}
 		
-	}
+	}*/
 	
 	private void OnTriggerEnter2D(Collider2D other) {
 		if(!other.isTrigger)
