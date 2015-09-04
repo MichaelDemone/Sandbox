@@ -6,7 +6,7 @@ public class Dictionary : MonoBehaviour {
 	public static Hashtable dictionary;
 	public static bool initialized = false;
 
-	public GameObject dirt, copper, collectable, dirtWGrass;
+	public GameObject dirt, copper, collectable, dirtWGrass, sand, leaves, log;
 
 	// Use this for initialization
 	void Start () {
@@ -17,6 +17,9 @@ public class Dictionary : MonoBehaviour {
 		dictionary.Add ("Copper", copper);
 		dictionary.Add ("Collectable", collectable);
 		dictionary.Add ("DirtWGrass", dirtWGrass);
+		dictionary.Add ("Sand", sand);
+		dictionary.Add ("Log", log);
+		dictionary.Add ("Leaves", leaves);
 
 		// Adding weapons
 
