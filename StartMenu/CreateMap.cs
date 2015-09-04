@@ -64,7 +64,7 @@ public class CreateMap : MonoBehaviour {
 			maxY = 100;
 		}
 
-
+		GenerateTrees.placeTrees((int) maxY, 1.95f);
 
 		for (float i = -2*distanceBetweenLoads + widthOfGroundPiece; i < distanceBetweenLoads; i += widthOfGroundPiece){
 			for (float j = minY; j < maxY; j += widthOfGroundPiece){
