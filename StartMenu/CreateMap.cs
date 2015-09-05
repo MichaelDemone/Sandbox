@@ -43,7 +43,7 @@ public class CreateMap : MonoBehaviour {
 			
 			// Create map from -1000 to 1000
 			for (float i = -1000; i < 1000; i += widthOfGroundPiece) {
-				
+
 				// Pick whether the block goes up or down
 				previousYPosR += selectDirection();
 				
@@ -58,7 +58,7 @@ public class CreateMap : MonoBehaviour {
 				
 				if (previousYPosR > maxY) maxY = previousYPosR;
 			}
-			
+
 		} else {
 			Debug.Log("Loading map");
 			maxY = 100;
@@ -70,7 +70,15 @@ public class CreateMap : MonoBehaviour {
 		for (float i = x - 50; i < x + 50; i += widthOfGroundPiece) 
 			for (float j = y -50; j < y + 50; j += widthOfGroundPiece)
 				WalkingGeneration.loadPeice (i, j, 0);
-		
+
+		GenerateTrees.placeTrees((int) maxY, 1.95f);
+
+		for (float i = -2*distanceBetweenLoads + widthOfGroundPiece; i < distanceBetweenLoads; i += widthOfGroundPiece){
+			for (float j = minY; j < maxY; j += widthOfGroundPiece){
+				WalkingGeneration.loadPeice(i,j,0);
+
+			}
+		}
 	}
 	
 	// Update is called once per frame
@@ -88,6 +96,7 @@ public class CreateMap : MonoBehaviour {
 				rightLastTransition = goingRight;
 				lastXTransition = i;
 			}
+
 			for(int i = lastXTransition; i > xPos; i -= distanceBetweenLoads) {
 				WalkingGeneration.loadPeices(i, yPos, goingRight, goingUp, true, false);
 				rightLastTransition = goingRight;
