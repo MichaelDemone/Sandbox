@@ -56,9 +56,6 @@ public class Inventory : MonoBehaviour {
 			currentlyPlacingAnObject = true;
 
 			Vector3 pos = Input.mousePosition;
-			pos.z = -25;
-			pos.x = Screen.width - pos.x;
-			pos.y = Screen.height - pos.y;
 			pos = Camera.main.ScreenToWorldPoint(pos);
 
 			RaycastHit2D hit = Physics2D.Raycast(pos, new Vector3(0,0,1));

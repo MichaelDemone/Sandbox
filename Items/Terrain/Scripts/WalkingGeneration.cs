@@ -3,38 +3,108 @@ using System.Collections;
 
 public class WalkingGeneration : CreateMap {
 	
-	//private static int playerXPosition;
+	private static float yMin, yMax, xMin, xMax;
+
+	public static float cameraSizeX = 60, cameraSizeY = 80;
+	public static int bufferSize = 1;
+
 
 	// Loading
-	public static void loadPeices(int xPos) {
-
-		int playerXPosition = xPos;
-		bool goingRight = player.GetComponent<Rigidbody2D> ().velocity.x > 0;
+	public static void loadPeices(int xPos, int yPos, bool goingRight, bool goingUp, bool x, bool y) {
+		int yMod;
+		int xMod;
 		
-		if(goingRight) {
-			int loadingPosition = playerXPosition + distanceBetweenLoads;
-			int loadTo = playerXPosition + 2*distanceBetweenLoads;
-
-			for (float i = loadingPosition; i < loadTo; i += widthOfGroundPiece) {
-				for  (float j = minY; j < maxY; j += widthOfGroundPiece) {
-					loadPeice(i,j,0);
+		if (goingUp) {
+			yMod = 1;
+		} else {
+			yMod = -1;
+		}
+		
+		if (goingRight) {
+			xMod = 1;
+		} else {
+			xMod = -1;
+		}
+		
+		int loadingXPosition;
+		int loadXTo;
+		int loadingYPosition;
+		int loadYTo;
+		
+		/*                  ↓↓ Loading this part
+   		 _ _ _ _ _ _ _
+		|	_ _ _ _	  |
+		|  |	   |  |
+		|  |	.  |  |
+		|  |_ _ _ _|  |
+		|_ _ _ _ _ _ _|
+*/		
+		
+		if (x) {
+			
+			// X LOADING
+			loadingXPosition = Mathf.RoundToInt (xPos + xMod * cameraSizeX);
+			loadXTo = Mathf.RoundToInt (xPos + xMod * (cameraSizeX + bufferSize));
+			
+			loadingYPosition = Mathf.RoundToInt (yPos - cameraSizeY - bufferSize);
+			loadYTo = Mathf.RoundToInt (yPos + (cameraSizeY + bufferSize));
+			
+			if (goingRight) {
+				for (float i = loadingXPosition; i < loadXTo; i += widthOfGroundPiece) {
+					for (float j = loadingYPosition; j < loadYTo; j += widthOfGroundPiece) {
+						loadPeice (i, j, 0);
+					}
+				}
+			} else {
+				for (float i = loadingXPosition; i > loadXTo; i -= widthOfGroundPiece) {
+					for (float j = loadingYPosition; j < loadYTo; j += widthOfGroundPiece) {
+						loadPeice (i, j, 0);
+					}
 				}
 			}
-
-		} else {
-			int loadingPosition = playerXPosition - distanceBetweenLoads;
-			int loadTo = playerXPosition - 2*distanceBetweenLoads;
-
-			for (float i = loadingPosition; i > loadTo; i -= widthOfGroundPiece) {
-				for  (float j = minY; j < maxY; j += widthOfGroundPiece) {
-					loadPeice(i,j,0);
+		}
+/*		 _ _ _ _ _ _ _
+		|	_ _ _ _	  | <- Loading this part
+		|  |	   |  |
+		|  |	.  |  |
+		|  |_ _ _ _|  |
+		|_ _ _ _ _ _ _|
+*/
+		if (y) {
+			
+			// Y LOADING
+			loadingXPosition = Mathf.RoundToInt (xPos - cameraSizeX - bufferSize);
+			loadXTo = Mathf.RoundToInt (xPos + cameraSizeY + bufferSize);
+			
+			loadingYPosition = Mathf.RoundToInt (yPos + yMod * cameraSizeY);
+			loadYTo = Mathf.RoundToInt (yPos + yMod * (cameraSizeY + bufferSize));
+			
+			if (goingUp) {
+				for (float j = loadingYPosition; j < loadYTo; j += widthOfGroundPiece) {
+					for (float i = loadingXPosition; i < loadXTo; i += widthOfGroundPiece) {
+						loadPeice (i, j, 0);
+					}
+				}
+			} else {
+				for (float j = loadingYPosition; j > loadYTo; j -= widthOfGroundPiece) {
+					for (float i = loadingXPosition; i < loadXTo; i += widthOfGroundPiece) {
+						loadPeice (i, j, 0);
+					}
 				}
 			}
 		}
 	}
+
+
 	
 	public static void loadPeice(float i, float j, float k) {
+
+
 		Vector3 pos = new Vector3 (i, j, k);
+
+		if (Physics2D.OverlapPoint (pos))
+			return;
+
 		string tile = (string) map[pos];
 		if(tile != null) {
 			GameObject obj = (GameObject) GameObject.Instantiate(Dictionary.get (tile), pos, Quaternion.identity);
@@ -43,30 +113,22 @@ public class WalkingGeneration : CreateMap {
 	}
 
 	// Unloading
-	public static void unloadPeices(int xPos) {
+	public static void unloadPeices(int xPos, int yPos, bool goingRight, bool goingUp, bool x, bool y) {
 
-		int playerXPosition = xPos;
-		bool goingRight = player.GetComponent<Rigidbody2D>().velocity.x > 0;
+	}
 
-		if(goingRight) {
-			float startingPos = playerXPosition - distanceBetweenLoads;
-			float endingPos = playerXPosition - 2*distanceBetweenLoads;
-
-			for (float i = startingPos; i > endingPos; i -= widthOfGroundPiece) {
-				for(float j = minY; j < maxY; j += widthOfGroundPiece) {
-					unloadPeice(i,j,0);
-				}
-			}
-		} else {
-			float startingPos = playerXPosition + distanceBetweenLoads;
-			float endingPos = playerXPosition + 2*distanceBetweenLoads;
-
-			for (float i = startingPos; i < endingPos; i += widthOfGroundPiece) {
-				for(float j = minY; j < maxY; j += widthOfGroundPiece) {
-					unloadPeice(i,j,0);
-				}
-			}
+	public static void unloadPeice(GameObject gm) {
+		Vector3 pos = gm.transform.position;
+		Item script = gm.GetComponent<Item>();
+		if (map.Contains (pos)) {
+			if(map[pos].Equals(script.name))
+				map.Remove(pos);
+			else
+				return;
 		}
+		map.Add (pos, script.name);
+		GameObject.Destroy (gm);
+		
 	}
 
 	// Saves point to the map

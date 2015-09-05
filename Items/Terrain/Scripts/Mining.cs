@@ -11,6 +11,7 @@ public class Mining : MonoBehaviour {
 	private float miningDistance;
 	private GameObject player;
 	private float timeLastHit;
+	
 
 	// Use this for initialization
 	void Start () {
