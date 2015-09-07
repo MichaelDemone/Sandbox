@@ -4,18 +4,15 @@ using System.Collections;
 public class Movement : MonoBehaviour {
 	
 	public float acceleration, currentSpeed;
-	private float targetSpeed = 5;
 	private float jumpSpeed = 5;
 	private bool grounded = false;
 	private GameObject inventoryUI;
 	private float onSomethingTest;
-	private CircleCollider2D circleCollider;
 
 	// Use this for initialization
 	void Start () {
 		inventoryUI = GameObject.Find ("Inventory");
 		onSomethingTest = Time.time;
-		circleCollider = GetComponent<CircleCollider2D>();
 	}
 	
 	// Update is called once per frame
@@ -23,36 +20,27 @@ public class Movement : MonoBehaviour {
 	
 
 		Vector2 speed = new Vector2 (this.GetComponent<Rigidbody2D> ().velocity.x, this.GetComponent<Rigidbody2D> ().velocity.y);
+
 		if (Input.GetKey (KeyCode.A)) {
 			speed.x = -5;
 			transform.localRotation = Quaternion.Euler(0,180,0);
-		}else if (Input.GetKey(KeyCode.D)) {
+		} else if (Input.GetKey(KeyCode.D)) {
 			speed.x = 5;
 			transform.localRotation = Quaternion.Euler(0,0,0);
-		}else{
+		} else{
 			speed.x = 0;
 		}
-
-
 
 		if (Input.GetKey(KeyCode.Space) && grounded) {
 			speed.y = jumpSpeed;
 		}
-	
 
+		this.GetComponent<Rigidbody2D> ().velocity = speed;
 		GetComponent<Animator>().SetBool("moving",Mathf.Abs(speed.x) > 1);
 
 		if (Input.GetKeyDown (KeyCode.Escape)) {
 			inventoryUI.GetComponent<InventoryUI>().showOrHideInventory();
 		}
-
-		this.GetComponent<Rigidbody2D> ().velocity = speed;
-
-		/*if (Input.GetMouseButton(0)){
-			GetComponent<Animator>().SetBool( "mining", true );
-		}else{
-			GetComponent<Animator>().SetBool( "mining", false );
-		}*/
 
 		if (Time.time - onSomethingTest > 0.25) {
 			OnTriggerExit2D(null);

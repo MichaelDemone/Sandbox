@@ -47,6 +47,7 @@ public class LoadWorld : MonoBehaviour {
 	public void saveWorld() {
 		string vectorSave = System.Environment.GetFolderPath(System.Environment.SpecialFolder.MyDocuments) + "\\SandBox\\Worlds\\myVectors.werld";
 		string tileSave = vectorSave.Replace ("myVectors.werld", "myTiles.werld");
+
 		Stream stream, stream2;
 		if (!File.Exists (vectorSave)) {
 			if(!Directory.Exists(vectorSave.Replace("myVectors.werld","")))

@@ -9,7 +9,7 @@ public class PlayerPhysics : MonoBehaviour {
 
 	public bool grounded;
 
-	private BoxCollider2D collider;
+	private BoxCollider2D boxCollider;
 	private Vector2 playerSize;
 	private Vector2 offset;
 
@@ -19,9 +19,9 @@ public class PlayerPhysics : MonoBehaviour {
 	RaycastHit2D hit;
 
 	void Start() {
-		collider = GetComponent<BoxCollider2D>();
-		playerSize = collider.size*5;
-		offset = collider.offset;
+		boxCollider = GetComponent<BoxCollider2D>();
+		playerSize = boxCollider.size*5;
+		offset = boxCollider.offset;
 	}
 
 	public void Move(Vector2 moveAmount){
