@@ -23,6 +23,7 @@ public class Mining : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (strength == 0) {
+			CreateMap.map.Remove(transform.position);
 			GetComponent<Item>().drop();
 			GameObject.Destroy (this.gameObject);
 		}

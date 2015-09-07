@@ -57,17 +57,14 @@ public class Inventory : MonoBehaviour {
 
 			Vector3 pos = Input.mousePosition;
 			pos = Camera.main.ScreenToWorldPoint(pos);
+			pos = new Vector2(Mathf.RoundToInt(pos.x), Mathf.RoundToInt(pos.y));
 
-			RaycastHit2D hit = Physics2D.Raycast(pos, new Vector3(0,0,1));
+			Collider2D hit = Physics2D.OverlapPoint(pos);
 
-			if(hit.collider != null && hit.collider.tag.Equals("Tile")) {
-				//Debug.Log(hit.collider.name);
-			}
-			else {
-				int xPos = Mathf.RoundToInt (pos.x);
-				int yPos = Mathf.RoundToInt (pos.y);
+			if(hit == null) {
 
-				GameObject go = (GameObject) GameObject.Instantiate (equipped, new Vector3(xPos, yPos, 0), Quaternion.identity);
+				GameObject go = (GameObject) GameObject.Instantiate (equipped, pos, Quaternion.identity);
+				CreateMap.map.Add (pos, go.GetComponent<Item>().name);
 
 				itemAmount[equippedNum] -= 1;
 				inventoryUI.changeNumOfItems(equippedNum, itemAmount[equippedNum]);

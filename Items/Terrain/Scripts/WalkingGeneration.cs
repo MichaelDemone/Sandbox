@@ -50,13 +50,13 @@ public class WalkingGeneration : CreateMap {
 			loadYTo = Mathf.RoundToInt (yPos + (cameraSizeY + bufferSize));
 			
 			if (goingRight) {
-				for (float i = loadingXPosition; i < loadXTo; i += widthOfGroundPiece) {
+				for (float i = loadingXPosition; i <= loadXTo; i += widthOfGroundPiece) {
 					for (float j = loadingYPosition; j < loadYTo; j += widthOfGroundPiece) {
 						loadPeice (i, j, 0);
 					}
 				}
 			} else {
-				for (float i = loadingXPosition; i > loadXTo; i -= widthOfGroundPiece) {
+				for (float i = loadingXPosition; i >= loadXTo; i -= widthOfGroundPiece) {
 					for (float j = loadingYPosition; j < loadYTo; j += widthOfGroundPiece) {
 						loadPeice (i, j, 0);
 					}

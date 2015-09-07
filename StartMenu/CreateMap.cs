@@ -14,8 +14,8 @@ public class CreateMap : MonoBehaviour {
 	protected static int distanceBetweenLoads = 1;
 	private int lastXTransition = 0, lastYTransition = 0;
 	private bool rightLastTransition = true, upLastTransition = false;
-	private const int WIDTH_OF_BOXES = 20, HEIGHT_OF_BOXES = 60;
-	private const int DIST_TO = 30;
+	private float widthDestroyBox = 20, heightDestroyBox = 60;
+	private float distToDestroyBox = 30;
 	
 	// Use this for initialization
 	void Start () {
@@ -25,8 +25,15 @@ public class CreateMap : MonoBehaviour {
 		lastXTransition = Mathf.RoundToInt(player.transform.position.x);
 		lastYTransition = Mathf.RoundToInt(player.transform.position.y);
 
-		WalkingGeneration.cameraSizeX = 2*Camera.main.orthographicSize;
-		WalkingGeneration.cameraSizeY = Camera.main.orthographicSize;
+		WalkingGeneration.cameraSizeX = 2*Camera.main.orthographicSize + 5;
+		WalkingGeneration.cameraSizeY = Camera.main.orthographicSize + 10;
+
+		Debug.Log (WalkingGeneration.cameraSizeX);
+
+		distToDestroyBox = WalkingGeneration.cameraSizeX + 2;
+		heightDestroyBox = distToDestroyBox * 2;
+		widthDestroyBox = heightDestroyBox / 3f;
+
 
 		player.transform.position = new Vector3 (0, player.transform.position.y);
 		if (map == null) {
@@ -64,19 +71,17 @@ public class CreateMap : MonoBehaviour {
 			maxY = 100;
 		}
 
-		player.transform.position = new Vector3 (10, maxY);
-		float x = Mathf.RoundToInt(player.transform.position.x);
-		float y = Mathf.RoundToInt (player.transform.position.y);
-		for (float i = x - 50; i < x + 50; i += widthOfGroundPiece) 
-			for (float j = y -50; j < y + 50; j += widthOfGroundPiece)
-				WalkingGeneration.loadPeice (i, j, 0);
+		player.transform.position = new Vector3 (10, 26);
 
-		GenerateTrees.placeTrees((int) maxY, 1.95f);
+		int loadingRight = Mathf.RoundToInt(player.transform.position.x + distToDestroyBox + widthDestroyBox);
+		int loadingLeft = Mathf.RoundToInt(player.transform.position.x - distanceBetweenLoads - widthDestroyBox);
+		                             
+		int bottomLoad = Mathf.RoundToInt(player.transform.position.y - distToDestroyBox - widthDestroyBox);
+		int topLoad = Mathf.RoundToInt(player.transform.position.y + distToDestroyBox + widthDestroyBox);
 
-		for (float i = -2*distanceBetweenLoads + widthOfGroundPiece; i < distanceBetweenLoads; i += widthOfGroundPiece){
-			for (float j = minY; j < maxY; j += widthOfGroundPiece){
+		for (float i = loadingLeft; i < loadingRight; i += widthOfGroundPiece){
+			for (float j = bottomLoad; j < topLoad; j += widthOfGroundPiece){
 				WalkingGeneration.loadPeice(i,j,0);
-
 			}
 		}
 	}
@@ -135,31 +140,36 @@ public class CreateMap : MonoBehaviour {
 
 		Collider2D[] collidersY;
 		Collider2D[] collidersX;
-		//Debug.DrawLine (new Vector2 (xPos + HEIGHT_OF_BOXES / 2, yPos + DIST_TO + WIDTH_OF_BOXES), new Vector2(xPos - HEIGHT_OF_BOXES/2, yPos + DIST_TO));
-		//Debug.DrawLine (new Vector2(xPos + HEIGHT_OF_BOXES/2, yPos - DIST_TO - WIDTH_OF_BOXES), new Vector2(xPos - HEIGHT_OF_BOXES/2, yPos - DIST_TO));
-		//Debug.DrawLine (new Vector2(xPos + DIST_TO, yPos - HEIGHT_OF_BOXES/2), new Vector2(xPos + DIST_TO + WIDTH_OF_BOXES, yPos + HEIGHT_OF_BOXES/2));
-		//Debug.DrawLine (new Vector2(xPos - DIST_TO, yPos - HEIGHT_OF_BOXES/2), new Vector2(xPos - DIST_TO - WIDTH_OF_BOXES, yPos + HEIGHT_OF_BOXES/2));
 
-		if(!goingUp)
-			collidersY = Physics2D.OverlapAreaAll(new Vector2(xPos + HEIGHT_OF_BOXES/2, yPos + DIST_TO + WIDTH_OF_BOXES), 
-			                                      new Vector2(xPos - HEIGHT_OF_BOXES/2, yPos + DIST_TO));
-		else
-			collidersY = Physics2D.OverlapAreaAll(new Vector2(xPos + HEIGHT_OF_BOXES/2, yPos - DIST_TO - WIDTH_OF_BOXES), 
-			                                      new Vector2(xPos - HEIGHT_OF_BOXES/2, yPos - DIST_TO));
-		if(!goingRight)
-			collidersX = Physics2D.OverlapAreaAll(new Vector2(xPos + DIST_TO, yPos - HEIGHT_OF_BOXES/2), 
-			                                      new Vector2(xPos + DIST_TO + WIDTH_OF_BOXES, yPos + HEIGHT_OF_BOXES/2));
-		else
-			collidersX = Physics2D.OverlapAreaAll(new Vector2(xPos - DIST_TO, yPos - HEIGHT_OF_BOXES/2), 
-			                                      new Vector2(xPos - DIST_TO - WIDTH_OF_BOXES, yPos + HEIGHT_OF_BOXES/2));
+		/*
+		Debug.DrawLine (new Vector2 (xPos + heightDestroyBox / 2, yPos + distToDestroyBox + widthDestroyBox), new Vector2(xPos - heightDestroyBox/2, yPos + distToDestroyBox));
+		Debug.DrawLine (new Vector2(xPos + heightDestroyBox/2, yPos - distToDestroyBox - widthDestroyBox), new Vector2(xPos - heightDestroyBox/2, yPos - distToDestroyBox));
+		Debug.DrawLine (new Vector2(xPos + distToDestroyBox, yPos - heightDestroyBox/2), new Vector2(xPos + distToDestroyBox + widthDestroyBox, yPos + heightDestroyBox/2));
+		Debug.DrawLine (new Vector2(xPos - distToDestroyBox, yPos - heightDestroyBox/2), new Vector2(xPos - distToDestroyBox - widthDestroyBox, yPos + heightDestroyBox/2));
+		*/
+
+		if (!goingUp) {
+			collidersY = Physics2D.OverlapAreaAll (new Vector2 (xPos + heightDestroyBox / 2, yPos + distToDestroyBox + widthDestroyBox), 
+			                                      new Vector2 (xPos - heightDestroyBox / 2, yPos + distToDestroyBox));
+		} else {
+			collidersY = Physics2D.OverlapAreaAll (new Vector2 (xPos + heightDestroyBox / 2, yPos - distToDestroyBox - widthDestroyBox), 
+			                                      new Vector2 (xPos - heightDestroyBox / 2, yPos - distToDestroyBox));
+		}
+		if (!goingRight) {
+			collidersX = Physics2D.OverlapAreaAll (new Vector2 (xPos + distToDestroyBox, yPos - heightDestroyBox / 2), 
+			                                      new Vector2 (xPos + distToDestroyBox + widthDestroyBox, yPos + heightDestroyBox / 2));
+		} else {
+			collidersX = Physics2D.OverlapAreaAll (new Vector2 (xPos - distToDestroyBox, yPos - heightDestroyBox / 2), 
+			                                      new Vector2 (xPos - distToDestroyBox - widthDestroyBox, yPos + heightDestroyBox / 2));
+		}
 
 		foreach (Collider2D col in collidersX) {
 			if(col.CompareTag("Tile"))
-				WalkingGeneration.unloadPeice(col.gameObject);
+				Destroy(col.gameObject);
 		}
 		foreach (Collider2D col in collidersY) {
 			if(col.CompareTag("Tile"))
-				WalkingGeneration.unloadPeice(col.gameObject);
+				Destroy(col.gameObject);
 		}
 	}
 	
