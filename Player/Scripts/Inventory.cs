@@ -7,11 +7,11 @@ public class Inventory : MonoBehaviour {
 
 	public static bool hitting = true, equippedIsForPlacing = false;
 	public static GameObject equipped;
+	public static int equippedNum;
 	public static GameObject[] inventory;
 	public static int[] itemAmount;
 
 	private GameObject tileParent;
-	private bool currentlyPlacingAnObject = false;
 	private float placeTime;
 	private KeyCode[] codes;
 
@@ -49,11 +49,11 @@ public class Inventory : MonoBehaviour {
 			if(Input.GetKeyDown(codes[i])) {
 				inventoryUI.equip(i);
 				equipped = inventory[i];
+				equippedNum = i;
 			}
 		}
 
-		if (equippedIsForPlacing && Input.GetMouseButton (1) && !currentlyPlacingAnObject) {
-			currentlyPlacingAnObject = true;
+		if (equippedIsForPlacing && Input.GetMouseButton (1) && Time.time - placeTime > 0.25) {
 
 			Vector3 pos = Input.mousePosition;
 			pos = Camera.main.ScreenToWorldPoint(pos);
@@ -69,16 +69,21 @@ public class Inventory : MonoBehaviour {
 
 				GameObject go = (GameObject) GameObject.Instantiate (equipped, new Vector3(xPos, yPos, 0), Quaternion.identity);
 
+				itemAmount[equippedNum] -= 1;
+				inventoryUI.changeNumOfItems(equippedNum, itemAmount[equippedNum]);
+
+				if(itemAmount[equippedNum] == 0) {
+					inventory[equippedNum] = null;
+					equipped = null;
+					equippedIsForPlacing = false;
+					equippedNum = -1;
+				}
+
 				if(go.CompareTag("Tile")) {
 					go.transform.parent = tileParent.transform;
 				}
-
-
 			}
-		} else if (currentlyPlacingAnObject && Time.time - placeTime > 0.25) {
-			currentlyPlacingAnObject = false;
 		}
-
 	}
 
 	public static void addItem(GameObject item, GameObject collectable) {
@@ -119,7 +124,9 @@ public class Inventory : MonoBehaviour {
 	}
 
 	private static bool increaseNumberOfItems(GameObject item, GameObject collectable, int slotNumber) {
+
 		int maxStackSize = item.GetComponent<Item> ().maxStackSize;
+
 		if (itemAmount [slotNumber] == maxStackSize) {
 			return false;
 		} else if (itemAmount [slotNumber] > maxStackSize) {
@@ -141,7 +148,7 @@ public class Inventory : MonoBehaviour {
 				itemAmount[slotNumber] = amountInInventory;
 			}
 
-			inventoryUI.increaseNumberOfItems (slotNumber, amountInInventory);
+			inventoryUI.changeNumOfItems (slotNumber, amountInInventory);
 
 			return true;
 		}

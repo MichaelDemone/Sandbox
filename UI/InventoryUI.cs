@@ -64,6 +64,7 @@ public class InventoryUI : MonoBehaviour {
 		return;
 	}
 
+
 	public void addItem(Sprite item, int inventoryPosition) {
 		if(!menuOpen && inventoryPosition > 8)
 			images[inventoryPosition].GetComponent<Image>().sprite = blank;
@@ -71,11 +72,22 @@ public class InventoryUI : MonoBehaviour {
 			images[inventoryPosition].GetComponent<Image>().sprite = item;
 	}
 
-	public void increaseNumberOfItems(int slotNumber, int newSize) {
+	public void changeNumOfItems(int slotNumber, int newSize) {
 		if(!menuOpen && slotNumber > 8 || newSize == 1)
 			imageNums [slotNumber].GetComponent<Text> ().text = "";
 		else
 			imageNums [slotNumber].GetComponent<Text> ().text = newSize + "";
+
+		if (newSize == 0) {
+			images[slotNumber].GetComponent<Image>().sprite = blank;
+			imageNums [slotNumber].GetComponent<Text> ().text = "";
+			ColorBlock cb2 = selected.colors;
+			cb2.normalColor = Color.white;
+			selected.colors = cb2;
+			selected.isOn = false;
+			selected = null;
+		}
+
 	}
 
 	// Hiding and showing inventory
@@ -126,7 +138,11 @@ public class InventoryUI : MonoBehaviour {
 	
 	// Toggles, this is called from the inventory images
 	void toggleChanged() {
-		
+
+		/*if (Inventory.equipped != null) {
+			return;
+		}*/
+
 		for (int i = 0; i < images.Length; i++) {
 			Toggle tog = images[i].GetComponent<Toggle>();
 			if(tog.isOn && tog != selected) {
@@ -150,6 +166,7 @@ public class InventoryUI : MonoBehaviour {
 					selected = tog;
 					return;
 				}
+				Debug.Log("Tog is on");
 			}
 		}
 	}

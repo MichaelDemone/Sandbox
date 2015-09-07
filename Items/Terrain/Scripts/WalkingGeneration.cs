@@ -6,7 +6,7 @@ public class WalkingGeneration : CreateMap {
 	private static float yMin, yMax, xMin, xMax;
 
 	public static float cameraSizeX = 60, cameraSizeY = 80;
-	public static int bufferSize = 1;
+	public static int bufferSize = 2;
 
 
 	// Loading

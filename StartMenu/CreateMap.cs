@@ -135,6 +135,10 @@ public class CreateMap : MonoBehaviour {
 
 		Collider2D[] collidersY;
 		Collider2D[] collidersX;
+		//Debug.DrawLine (new Vector2 (xPos + HEIGHT_OF_BOXES / 2, yPos + DIST_TO + WIDTH_OF_BOXES), new Vector2(xPos - HEIGHT_OF_BOXES/2, yPos + DIST_TO));
+		//Debug.DrawLine (new Vector2(xPos + HEIGHT_OF_BOXES/2, yPos - DIST_TO - WIDTH_OF_BOXES), new Vector2(xPos - HEIGHT_OF_BOXES/2, yPos - DIST_TO));
+		//Debug.DrawLine (new Vector2(xPos + DIST_TO, yPos - HEIGHT_OF_BOXES/2), new Vector2(xPos + DIST_TO + WIDTH_OF_BOXES, yPos + HEIGHT_OF_BOXES/2));
+		//Debug.DrawLine (new Vector2(xPos - DIST_TO, yPos - HEIGHT_OF_BOXES/2), new Vector2(xPos - DIST_TO - WIDTH_OF_BOXES, yPos + HEIGHT_OF_BOXES/2));
 
 		if(!goingUp)
 			collidersY = Physics2D.OverlapAreaAll(new Vector2(xPos + HEIGHT_OF_BOXES/2, yPos + DIST_TO + WIDTH_OF_BOXES), 
