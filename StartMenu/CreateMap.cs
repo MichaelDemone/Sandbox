@@ -88,6 +88,7 @@ public class CreateMap : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
 		int xPos = Mathf.RoundToInt (player.transform.position.x);
 		int yPos = Mathf.RoundToInt (player.transform.position.y);
 		bool goingRight = player.GetComponent<Rigidbody2D>().velocity.x > 0;
@@ -95,7 +96,7 @@ public class CreateMap : MonoBehaviour {
 
 		// Check if player should load in the X direction
 		if (xPos > lastXTransition + distanceBetweenLoads || xPos < lastXTransition - distanceBetweenLoads) {
-			
+
 			for(int i = lastXTransition; i < xPos; i += distanceBetweenLoads) {
 				WalkingGeneration.loadPeices(i, yPos, goingRight, goingUp, true, false);
 				rightLastTransition = goingRight;
@@ -107,18 +108,11 @@ public class CreateMap : MonoBehaviour {
 				rightLastTransition = goingRight;
 				lastXTransition = i;
 			}
-			
-			if (xPos != lastXTransition || rightLastTransition != goingRight) {
-				WalkingGeneration.loadPeices(xPos, yPos, goingRight, goingUp, true, false);
-				rightLastTransition = goingRight;
-				lastXTransition = xPos;
-			}
 		}
 		
 		// Check if player should load in the X direction
-		else if (yPos > lastYTransition + distanceBetweenLoads || yPos < lastYTransition - distanceBetweenLoads) {
+		if (yPos > lastYTransition + distanceBetweenLoads || yPos < lastYTransition - distanceBetweenLoads) {
 
-			
 			for(int i = lastYTransition; i < yPos; i += distanceBetweenLoads) {
 				WalkingGeneration.loadPeices(xPos, i, goingRight, goingUp, false, true);
 				upLastTransition = goingUp;
@@ -128,12 +122,6 @@ public class CreateMap : MonoBehaviour {
 				WalkingGeneration.loadPeices(xPos, i, goingRight, goingUp, false, true);
 				upLastTransition = goingUp;
 				lastYTransition = i;
-			}
-			
-			if (yPos != lastYTransition || goingUp != upLastTransition) {
-				WalkingGeneration.loadPeices(xPos, yPos, goingRight, goingUp, false, true);
-				upLastTransition = goingUp;
-				lastYTransition = yPos;
 			}
 		}
 

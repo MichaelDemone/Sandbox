@@ -31,7 +31,7 @@ public class WalkingGeneration : CreateMap {
 		int loadingYPosition;
 		int loadYTo;
 		
-		/*                  ↓↓ Loading this part
+/*                  ↓↓ Loading this part
    		 _ _ _ _ _ _ _
 		|	_ _ _ _	  |
 		|  |	   |  |
@@ -74,20 +74,20 @@ public class WalkingGeneration : CreateMap {
 			
 			// Y LOADING
 			loadingXPosition = Mathf.RoundToInt (xPos - cameraSizeX - bufferSize);
-			loadXTo = Mathf.RoundToInt (xPos + cameraSizeY + bufferSize);
+			loadXTo = Mathf.RoundToInt (xPos + cameraSizeX + bufferSize);
 			
 			loadingYPosition = Mathf.RoundToInt (yPos + yMod * cameraSizeY);
 			loadYTo = Mathf.RoundToInt (yPos + yMod * (cameraSizeY + bufferSize));
 			
 			if (goingUp) {
 				for (float j = loadingYPosition; j < loadYTo; j += widthOfGroundPiece) {
-					for (float i = loadingXPosition; i < loadXTo; i += widthOfGroundPiece) {
+					for (float i = loadingXPosition; i <= loadXTo; i += widthOfGroundPiece) {
 						loadPeice (i, j, 0);
 					}
 				}
 			} else {
 				for (float j = loadingYPosition; j > loadYTo; j -= widthOfGroundPiece) {
-					for (float i = loadingXPosition; i < loadXTo; i += widthOfGroundPiece) {
+					for (float i = loadingXPosition; i <= loadXTo; i += widthOfGroundPiece) {
 						loadPeice (i, j, 0);
 					}
 				}
