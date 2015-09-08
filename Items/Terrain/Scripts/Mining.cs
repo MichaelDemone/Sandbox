@@ -31,7 +31,7 @@ public class Mining : MonoBehaviour {
 	
 	void OnMouseOver() {
 
-		if (Inventory.hitting && Input.GetMouseButton (0)) {
+		if (Input.GetMouseButton (0)) {
 
 			Vector3 vectorDifference = this.transform.position - player.transform.position;
 

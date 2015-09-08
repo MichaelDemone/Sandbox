@@ -70,6 +70,11 @@ public class Inventory : MonoBehaviour {
 				inventoryUI.changeNumOfItems(equippedNum, itemAmount[equippedNum]);
 
 				if(itemAmount[equippedNum] == 0) {
+
+					if (Inventory.equipped != null && Inventory.equipped.GetComponent<Item> ().name.Equals ("Torch")) {
+						Destroy(GameObject.Find ("Player").GetComponentInChildren<Light>().gameObject);
+					}
+
 					inventory[equippedNum] = null;
 					equipped = null;
 					equippedIsForPlacing = false;

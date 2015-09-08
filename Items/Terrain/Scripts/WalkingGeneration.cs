@@ -8,6 +8,7 @@ public class WalkingGeneration : CreateMap {
 	public static float cameraSizeX = 60, cameraSizeY = 80;
 	public static int bufferSize = 2;
 
+	// Should on;y be called once
 	public static void setValues() {
 		lastXTransition = Mathf.RoundToInt(player.transform.position.x);
 		lastYTransition = Mathf.RoundToInt(player.transform.position.y);
@@ -15,12 +16,12 @@ public class WalkingGeneration : CreateMap {
 		cameraSizeX = 2*Camera.main.orthographicSize + 5;
 		cameraSizeY = Camera.main.orthographicSize + 10;
 		
-		distToDestroyBox = WalkingGeneration.cameraSizeX + 2;
+		distToDestroyBox = cameraSizeX + 2;
 		heightDestroyBox = distToDestroyBox * 2;
 		widthDestroyBox = heightDestroyBox / 3f;
 	}
 
-
+	// Should be called in an update
 	public static void checkIfNeedsLoading() {
 		int xPos = Mathf.RoundToInt (player.transform.position.x);
 		int yPos = Mathf.RoundToInt (player.transform.position.y);
@@ -181,16 +182,14 @@ public class WalkingGeneration : CreateMap {
 			}
 		}
 	}
-
-
 	
 	public static void loadPeice(float i, float j, float k) {
 
-
 		Vector3 pos = new Vector3 (i, j, k);
 
-		if (Physics2D.OverlapPoint (pos))
+		if (Physics2D.OverlapPoint (pos)) {
 			return;
+		}
 
 		string tile = (string) map[pos];
 		if(tile != null) {
@@ -210,7 +209,6 @@ public class WalkingGeneration : CreateMap {
 		}
 		map.Add (pos, script.name);
 		GameObject.Destroy (gm);
-		
 	}
 
 	// Saves point to the map
@@ -227,21 +225,5 @@ public class WalkingGeneration : CreateMap {
 			map.Add(pos, script.name);
 			GameObject.Destroy(box.gameObject);
 		}
-	}
-
-	// Are there blocks in a given line/area?
-	private static bool areBlocksAt(float beginXPos, float endXPos, float beginYPos, float endYPos) {
-		
-		Vector2 pos = new Vector2();
-		
-		for (float i = beginXPos; i < endXPos; i+= widthOfGroundPiece) {
-			for(float j = beginYPos; j < endYPos; j+= widthOfGroundPiece) {
-				pos.x = i;
-				pos.y = j;
-				if(Physics2D.OverlapPoint (pos) != null)
-					return true;
-			}
-		}
-		return false;
 	}
 }

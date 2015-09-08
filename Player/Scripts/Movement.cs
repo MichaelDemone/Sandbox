@@ -5,7 +5,7 @@ public class Movement : MonoBehaviour {
 	
 	public float acceleration, currentSpeed;
 	private float jumpSpeed = 5;
-	private bool grounded = false;
+	private bool grounded = false, lookingRight = true;
 	private GameObject inventoryUI;
 	private float onSomethingTest;
 
@@ -23,10 +23,21 @@ public class Movement : MonoBehaviour {
 
 		if (Input.GetKey (KeyCode.A)) {
 			speed.x = -5;
-			transform.localRotation = Quaternion.Euler(0,180,0);
+
+			// Change direction
+			if(lookingRight) {
+				lookingRight = false;
+				transform.localScale = new Vector3 (-transform.localScale.x, transform.localScale.y, transform.localScale.z);
+			}
+
 		} else if (Input.GetKey(KeyCode.D)) {
 			speed.x = 5;
-			transform.localRotation = Quaternion.Euler(0,0,0);
+
+			// Change direction
+			if(!lookingRight) {
+				lookingRight = true;
+				transform.localScale = new Vector3 (-transform.localScale.x, transform.localScale.y, transform.localScale.z);
+			}
 		} else{
 			speed.x = 0;
 		}

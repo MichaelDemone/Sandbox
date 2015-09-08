@@ -8,6 +8,7 @@ public class CreateMap : MonoBehaviour {
 	
 	protected static GameObject player, ground;
 	protected static float maxY = 0, minY = 0;
+	protected static float minX = -1000, maxX = 1000;
 	protected static float previousYPosR = 0, previousYPosL = 0;
 	protected static float widthOfGroundPiece = 1;
 	protected const float MINIMUM_Y = -1000, MINIMUM_GROUND_Y = 0;
@@ -24,8 +25,6 @@ public class CreateMap : MonoBehaviour {
 
 		WalkingGeneration.setValues ();
 
-		player.transform.position = new Vector3 (10, 26);
-
 		if (map == null) {
 			
 			// Put the correct data in the map
@@ -40,7 +39,7 @@ public class CreateMap : MonoBehaviour {
 			previousYPosL = 10;
 			
 			// Create map from -1000 to 1000
-			for (float i = -1000; i < 1000; i += widthOfGroundPiece) {
+			for (float i = minX; i < maxX; i += widthOfGroundPiece) {
 
 				// Pick whether the block goes up or down
 				previousYPosR += selectDirection();
@@ -64,12 +63,19 @@ public class CreateMap : MonoBehaviour {
 			maxY = 100;
 		}
 
+		// Generate Caves
+		for (int i = 0; i < 10; i++) {
+			GenerateCaves.generateCave();
+		}
+
+		player.transform.position = new Vector3 (10, 26);
+
 		// Creating the objects for around you when you spawn
-		int loadingRight = Mathf.RoundToInt(player.transform.position.x + distToDestroyBox + widthDestroyBox);
-		int loadingLeft = Mathf.RoundToInt(player.transform.position.x - distanceBetweenLoads - widthDestroyBox);
+		int loadingRight = Mathf.RoundToInt(player.transform.position.x + distToDestroyBox);
+		int loadingLeft = Mathf.RoundToInt(player.transform.position.x - distanceBetweenLoads);
 		                             
-		int bottomLoad = Mathf.RoundToInt(player.transform.position.y - distToDestroyBox - widthDestroyBox);
-		int topLoad = Mathf.RoundToInt(player.transform.position.y + distToDestroyBox + widthDestroyBox);
+		int bottomLoad = Mathf.RoundToInt(player.transform.position.y - distToDestroyBox);
+		int topLoad = Mathf.RoundToInt(player.transform.position.y + distToDestroyBox);
 
 		for (float i = loadingLeft; i < loadingRight; i += widthOfGroundPiece){
 			for (float j = bottomLoad; j < topLoad; j += widthOfGroundPiece){

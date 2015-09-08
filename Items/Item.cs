@@ -22,6 +22,10 @@ public class Item : MonoBehaviour{
 
 
 	public void selectItem() {
+		if (Inventory.equipped != null && Inventory.equipped.GetComponent<Item> ().name.Equals ("Torch")) {
+			Destroy(GameObject.Find ("Player").GetComponentInChildren<Light>().gameObject);
+		}
+
 		Inventory.equipped = gameObject;
 		if (item) {
 			//Inventory.hitting = weapon;
@@ -29,6 +33,15 @@ public class Item : MonoBehaviour{
 		} else if (weapon) {
 			//Inventory.hitting = weapon;
 			Inventory.equippedIsForPlacing = true;
+		}
+
+		if (name.Equals ("Torch")) {
+			GameObject lightPrefab = Dictionary.get("Light");
+			GameObject light = (GameObject) GameObject.Instantiate(lightPrefab);
+			light.transform.SetParent(GameObject.Find("Player").transform);
+			light.transform.localPosition = new Vector3(0.1f,0,-1);
+			light.GetComponent<Light>().intensity = 8f;
+			light.GetComponent<Light>().range = 4f;
 		}
 	}
 
