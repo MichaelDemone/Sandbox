@@ -37,8 +37,8 @@ public class CreateMap : MonoBehaviour {
 			// This is the starting position
 			previousYPosR = 10;
 			previousYPosL = 10;
-			
 			// Create map from -1000 to 1000
+			
 			for (float i = minX; i < maxX; i += widthOfGroundPiece) {
 
 				// Pick whether the block goes up or down

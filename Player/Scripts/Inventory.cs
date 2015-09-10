@@ -46,14 +46,14 @@ public class Inventory : MonoBehaviour {
 	void Update () {
 
 		for (int i = 0; i < codes.Length; i++) {
-			if(Input.GetKeyDown(codes[i])) {
+			if(Input.GetKeyDown(codes[i]) && inventory[i] != null) {
 				inventoryUI.equip(i);
 				equipped = inventory[i];
 				equippedNum = i;
 			}
 		}
 
-		if (equippedIsForPlacing && Input.GetMouseButton (1) && Time.time - placeTime > 0.25) {
+		if (Input.GetMouseButton (1) && equippedIsForPlacing && Time.time - placeTime > 0.25) {
 
 			Vector3 pos = Input.mousePosition;
 			pos = Camera.main.ScreenToWorldPoint(pos);
@@ -63,7 +63,10 @@ public class Inventory : MonoBehaviour {
 
 			if(hit == null) {
 
+				// Place object
 				GameObject go = (GameObject) GameObject.Instantiate (equipped, pos, Quaternion.identity);
+
+				// Add to map of place
 				CreateMap.map.Add (pos, go.GetComponent<Item>().name);
 
 				itemAmount[equippedNum] -= 1;
@@ -83,6 +86,8 @@ public class Inventory : MonoBehaviour {
 
 				if(go.CompareTag("Tile")) {
 					go.transform.parent = tileParent.transform;
+				} else if(go.CompareTag("Light")) {
+					go.GetComponentInChildren<LightSource>().place();
 				}
 			}
 		}

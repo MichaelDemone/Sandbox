@@ -186,8 +186,8 @@ public class WalkingGeneration : CreateMap {
 	public static void loadPeice(float i, float j, float k) {
 
 		Vector3 pos = new Vector3 (i, j, k);
-
-		if (Physics2D.OverlapPoint (pos)) {
+		Collider2D col;
+		if ((col = Physics2D.OverlapPoint (pos)) && !col.isTrigger) {
 			return;
 		}
 
