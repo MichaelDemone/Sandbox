@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
 
@@ -87,7 +87,7 @@ public class Inventory : MonoBehaviour {
 				if(go.CompareTag("Tile")) {
 					go.transform.parent = tileParent.transform;
 				} else if(go.CompareTag("Light")) {
-					go.GetComponentInChildren<LightSource>().place();
+					go.GetComponentInChildren<LightSource>().lightUp();
 				}
 			}
 		}
@@ -146,16 +146,14 @@ public class Inventory : MonoBehaviour {
 			if(amountInCollectable + amountInInventory > maxStackSize) {
 				int amountBeingAdded = maxStackSize - amountInInventory;
 				collectable.GetComponent<Collect>().amount -= amountBeingAdded;
-				amountInInventory += amountBeingAdded;
-				itemAmount[slotNumber] = amountInInventory;
+				itemAmount[slotNumber] += amountBeingAdded;
 				addItem(item, collectable);
 
 			} else {
-				amountInInventory += amountInCollectable;
-				itemAmount[slotNumber] = amountInInventory;
+				itemAmount[slotNumber] += amountInCollectable;
 			}
 
-			inventoryUI.changeNumOfItems (slotNumber, amountInInventory);
+			inventoryUI.changeNumOfItems (slotNumber, itemAmount[slotNumber]);
 
 			return true;
 		}

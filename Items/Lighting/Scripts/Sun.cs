@@ -3,7 +3,9 @@ using System.Collections;
 
 public class Sun : MonoBehaviour {
 
+
 	public float ambientIntensity;
+
 
 	// Use this for initialization
 	void Start () {

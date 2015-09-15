@@ -18,6 +18,24 @@ public class Item : MonoBehaviour{
 
 	void Start() {
 
+		// If this is a recently placed tile, check the distance between each light source,
+		// and if that distance is within the light up distance, light up!
+		if (CompareTag ("Tile")) {
+			foreach(GameObject go in LightSource.lightSources) {
+				if((go.transform.position - transform.position).magnitude < go.GetComponent<LightSource>().blockRange) {
+					go.GetComponent<LightSource>().lightUp();
+				}
+			}
+
+			// Throw raycasts to see if wall exists and if above a certain height, if so light up
+
+			// Put raycasts in the up direction to see if there is a clear shot to the sky, if so
+			// make the block bright
+
+			// If tiles are around this and there is no wall, still have it black
+
+			// once a wall is destroyed make it act as a light source above a certain point.
+		}
 	}
 
 
@@ -40,6 +58,7 @@ public class Item : MonoBehaviour{
 			GameObject light = (GameObject) GameObject.Instantiate(lightPrefab);
 			light.transform.SetParent(GameObject.Find("Player").transform);
 			light.transform.localPosition = new Vector3(0.1f,0,-1);
+			light.GetComponent<LightSource>().onPlayer = true;
 		}
 	}
 
@@ -53,72 +72,5 @@ public class Item : MonoBehaviour{
 	}
 
 
-	// Lighting
-	public void illuminateMain() {
 
-		GetComponent<SpriteRenderer> ().color = Color.white;
-
-		int x = Mathf.RoundToInt(transform.position.x);
-		int y = Mathf.RoundToInt(transform.position.y);
-		Vector3 origin = new Vector3(x,y,0);
-
-		// Illuminate blocks around this block at half intensity
-		illuminateOther(origin, 0,1);
-		illuminateOther(origin, 1,1);
-		illuminateOther(origin, 1,0);
-		illuminateOther(origin, 1,-1);
-		illuminateOther(origin, 0,-1);
-		illuminateOther(origin, -1,-1);
-		illuminateOther(origin, -1,0);
-		illuminateOther(origin, -1,1);
-		return;
-		
-	}
-
-	private void illuminate() {
-		GetComponent<SpriteRenderer>().color = Color.grey;
-	}
-
-	private void illuminateOther(Vector2 origin, int x, int y) {
-		Vector3 pos = origin;
-		pos.x += x;
-		pos.y += y;
-		Collider2D col = Physics2D.OverlapPoint (pos);
-
-		if (col != null && col.CompareTag ("Tile")) {
-			if(col.GetComponent<SpriteRenderer>().color != Color.white)
-				col.GetComponent<SpriteRenderer>().color = Color.grey;
-		}
-	}
-
-
-
-	public void unIlluminateMain() {
-		GetComponent<SpriteRenderer> ().color = Color.black;
-		unIlluminateOther(0,1);
-		unIlluminateOther(1,1);
-		unIlluminateOther(1,0);
-		unIlluminateOther(1,-1);
-		unIlluminateOther(0,-1);
-		unIlluminateOther(-1,-1);
-		unIlluminateOther(-1,0);
-		unIlluminateOther(-1,1);
-	}
-
-	private void unIlluminate() {
-		GetComponent<SpriteRenderer> ().color = Color.black;
-	}
-
-	private void unIlluminateOther(int x, int y) {
-		Vector2 pos = transform.position;
-		pos.x += x;
-		pos.y += y;
-
-		Collider2D col = Physics2D.OverlapPoint (pos);
-
-		if (col != null && col.CompareTag ("Tile")) {
-			if(col.GetComponent<SpriteRenderer>().color != Color.black)
-				col.GetComponent<SpriteRenderer>().color = Color.black;
-		}
-	}
 }
