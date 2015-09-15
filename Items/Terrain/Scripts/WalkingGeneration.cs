@@ -141,12 +141,16 @@ public class WalkingGeneration : CreateMap {
 				for (float i = loadingXPosition; i <= loadXTo; i += widthOfGroundPiece) {
 					for (float j = loadingYPosition; j < loadYTo; j += widthOfGroundPiece) {
 						loadPeice (i, j, 0);
+						loadPeice (i, j, -1);
+						loadPeice (i, j, 1);
 					}
 				}
 			} else {
 				for (float i = loadingXPosition; i >= loadXTo; i -= widthOfGroundPiece) {
 					for (float j = loadingYPosition; j < loadYTo; j += widthOfGroundPiece) {
 						loadPeice (i, j, 0);
+						loadPeice (i, j, -1);
+						loadPeice (i, j, 1);
 					}
 				}
 			}
@@ -171,12 +175,16 @@ public class WalkingGeneration : CreateMap {
 				for (float j = loadingYPosition; j < loadYTo; j += widthOfGroundPiece) {
 					for (float i = loadingXPosition; i <= loadXTo; i += widthOfGroundPiece) {
 						loadPeice (i, j, 0);
+						loadPeice (i, j, -1);
+						loadPeice (i, j, 1);
 					}
 				}
 			} else {
 				for (float j = loadingYPosition; j > loadYTo; j -= widthOfGroundPiece) {
 					for (float i = loadingXPosition; i <= loadXTo; i += widthOfGroundPiece) {
 						loadPeice (i, j, 0);
+						loadPeice (i, j, -1);
+						loadPeice (i, j, 1);
 					}
 				}
 			}
@@ -187,7 +195,7 @@ public class WalkingGeneration : CreateMap {
 
 		Vector3 pos = new Vector3 (i, j, k);
 		Collider2D col;
-		if ((col = Physics2D.OverlapPoint (pos)) && !col.isTrigger) {
+		if ((col = Physics2D.OverlapPoint (pos, LayerMask.NameToLayer("Ground"), k, k)) && !col.isTrigger) {
 			return;
 		}
 
