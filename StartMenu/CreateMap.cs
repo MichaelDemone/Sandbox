@@ -101,8 +101,8 @@ public class CreateMap : MonoBehaviour {
 		for (float i = loadingLeft; i < loadingRight; i += widthOfGroundPiece){
 			for (float j = bottomLoad; j < topLoad; j += widthOfGroundPiece){
 				WalkingGeneration.loadPeice(i,j,0);
-				WalkingGeneration.loadPeice(i,j,-1);
-				WalkingGeneration.loadPeice(i,j,1);
+				//WalkingGeneration.loadPeice(i,j,-1);
+				//WalkingGeneration.loadPeice(i,j,1);
 			}
 		}
 	}

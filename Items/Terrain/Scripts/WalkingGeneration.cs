@@ -195,7 +195,8 @@ public class WalkingGeneration : CreateMap {
 
 		Vector3 pos = new Vector3 (i, j, k);
 		Collider2D col;
-		if ((col = Physics2D.OverlapPoint (pos, LayerMask.NameToLayer("Ground"), k, k)) && !col.isTrigger) {
+		if ((col = Physics2D.OverlapPoint (pos, -1, k-0.1f, k+0.1f)) != null && !col.isTrigger) {
+
 			return;
 		}
 
