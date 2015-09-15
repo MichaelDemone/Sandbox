@@ -46,11 +46,30 @@ public class CreateMap : MonoBehaviour {
 				
 				for (float j = -20; j < previousYPosR; j += widthOfGroundPiece) {
 					position = new Vector3 (i, j, 0);
-					map.Add (position, "Dirt");
+					map.Add (position, "Rock");
+					
 				}
-				
+
+				Vector3 position1 = position;
+				Vector3 position2 = position;
+				Vector3 position3 = position;
+				Vector3 position4 = position;
+
+				position1.y = position.y - 1;
+				position2.y = position.y - 2;
+				position3.y = position.y - 3;
+				position4.y = position.y - 4;
+
 				// Put grassy block on top
 				map.Remove (position);
+				map.Remove (position1);
+				map.Remove (position2);
+				map.Remove (position3);
+				map.Remove (position4);
+				map.Add (position1, "Dirt");
+				map.Add (position2, "Dirt");
+				map.Add (position3, "Dirt");
+				map.Add (position4, "Dirt");
 				map.Add (position, "DirtWGrass");
 
 				// Set minimum and maximum y value
