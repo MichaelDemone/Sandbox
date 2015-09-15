@@ -38,7 +38,7 @@ public class CreateMap : MonoBehaviour {
 			previousYPosR = 10;
 			previousYPosL = 10;
 			// Create map from -1000 to 1000
-			
+
 			for (float i = minX; i < maxX; i += widthOfGroundPiece) {
 
 				// Pick whether the block goes up or down
@@ -87,6 +87,8 @@ public class CreateMap : MonoBehaviour {
 			GenerateCaves.generateCave();
 		}
 
+		GenerateTrees.treeLocation((int)maxY, 1.95f);
+
 		player.transform.position = new Vector3 (10, 26);
 
 		// Creating the objects for around you when you spawn
@@ -99,6 +101,8 @@ public class CreateMap : MonoBehaviour {
 		for (float i = loadingLeft; i < loadingRight; i += widthOfGroundPiece){
 			for (float j = bottomLoad; j < topLoad; j += widthOfGroundPiece){
 				WalkingGeneration.loadPeice(i,j,0);
+				//WalkingGeneration.loadPeice(i,j,-1);
+				//WalkingGeneration.loadPeice(i,j,1);
 			}
 		}
 	}
