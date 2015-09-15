@@ -47,7 +47,7 @@ public class LightSource : MonoBehaviour {
 		}
 	}
 
-	// Light up the block around this light
+	// Light up the blocks around this light
 	public void lightUp() {
 		
 		Collider2D[] cols = Physics2D.OverlapCircleAll (transform.position, blockRange);
