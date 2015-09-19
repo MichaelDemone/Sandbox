@@ -27,26 +27,27 @@ public class GenerateTrees {
 
 	public static void placeTrees(Vector3 location){
 
-//		CreateMap.map.Add(location, "Log");
-//		CreateMap.map.Add(new Vector3(location.x,location.y+1,location.z), "Log");
-//		CreateMap.map.Add(new Vector3(location.x,location.y+2,location.z), "Log");
+		CreateMap.map.Add(location, "Log");
+		CreateMap.map.Add(new Vector3(location.x,location.y+1,location.z), "Log");
+		CreateMap.map.Add(new Vector3(location.x,location.y+2,location.z), "Log");
 		CreateMap.map.Add(new Vector3(location.x,location.y+3,location.z), "Log");
-//		CreateMap.map.Add(new Vector3(location.x,location.y+4,location.z), "Log");
-//
-//		CreateMap.map.Add(new Vector3(location.x-1,location.y+3,location.z), "Leaves");
-//		CreateMap.map.Add(new Vector3(location.x+1,location.y+3,location.z), "Leaves");
-//		CreateMap.map.Add(new Vector3(location.x-2,location.y+3,location.z), "Leaves");
-//		CreateMap.map.Add(new Vector3(location.x+2,location.y+3,location.z), "Leaves");
-//		CreateMap.map.Add(new Vector3(location.x-3,location.y+3,location.z), "Leaves");
-//		CreateMap.map.Add(new Vector3(location.x+3,location.y+3,location.z), "Leaves");
+		CreateMap.map.Add(new Vector3(location.x,location.y+4,location.z), "Log");
+
+		CreateMap.map.Add(new Vector3(location.x-1,location.y+3,location.z), "Leaves");
+		CreateMap.map.Add(new Vector3(location.x+1,location.y+3,location.z), "Leaves");
+		CreateMap.map.Add(new Vector3(location.x-2,location.y+3,location.z), "Leaves");
+		CreateMap.map.Add(new Vector3(location.x+2,location.y+3,location.z), "Leaves");
+		CreateMap.map.Add(new Vector3(location.x-3,location.y+3,location.z), "Leaves");
+		CreateMap.map.Add(new Vector3(location.x+3,location.y+3,location.z), "Leaves");
 		CreateMap.map.Add(new Vector3(location.x,location.y+3,location.z-1), "Leaves");
-//		CreateMap.map.Add(new Vector3(location.x-1,location.y+4,location.z), "Leaves");
-//		CreateMap.map.Add(new Vector3(location.x+1,location.y+4,location.z), "Leaves");
-//		CreateMap.map.Add(new Vector3(location.x-2,location.y+4,location.z), "Leaves");
-//		CreateMap.map.Add(new Vector3(location.x+2,location.y+4,location.z), "Leaves");
-//		CreateMap.map.Add(new Vector3(location.x,location.y+5,location.z), "Leaves");
-//		CreateMap.map.Add(new Vector3(location.x-1,location.y+5,location.z), "Leaves");
-//		CreateMap.map.Add(new Vector3(location.x+1,location.y+5,location.z), "Leaves");
-//		CreateMap.map.Add(new Vector3(location.x,location.y+6,location.z), "Leaves");
+		CreateMap.map.Add(new Vector3(location.x,location.y+4,location.z-1), "Leaves");
+		CreateMap.map.Add(new Vector3(location.x-1,location.y+4,location.z), "Leaves");
+		CreateMap.map.Add(new Vector3(location.x+1,location.y+4,location.z), "Leaves");
+		CreateMap.map.Add(new Vector3(location.x-2,location.y+4,location.z), "Leaves");
+		CreateMap.map.Add(new Vector3(location.x+2,location.y+4,location.z), "Leaves");
+		CreateMap.map.Add(new Vector3(location.x,location.y+5,location.z), "Leaves");
+		CreateMap.map.Add(new Vector3(location.x-1,location.y+5,location.z), "Leaves");
+		CreateMap.map.Add(new Vector3(location.x+1,location.y+5,location.z), "Leaves");
+		CreateMap.map.Add(new Vector3(location.x,location.y+6,location.z), "Leaves");
 	}
 }
