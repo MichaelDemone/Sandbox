@@ -7,11 +7,19 @@ public class InventoryUI : MonoBehaviour {
 	public Sprite blank, hotbar, fullInventory;
 	
 	private Toggle selected;
-	private GameObject[] images, imageNums;
+	public static GameObject[] images, imageNums;
 	private bool menuOpen = false;
 
 	// Use this for initialization
 	void Start () {
+
+		//When loaded into the BuildingBuilding it will show the full inventory, may scale down later
+		if (Application.loadedLevel == 2){
+			menuOpen = true;
+		}
+		//Keeps inventory when changing inbetween scenes
+		DontDestroyOnLoad(GameObject.Find("UI"));
+		DontDestroyOnLoad(GameObject.Find("Player"));
 
 		// Initializing images
 		ArrayList imagesTemp = new ArrayList ();
@@ -54,6 +62,7 @@ public class InventoryUI : MonoBehaviour {
 		if (selected != null) {
 			selected.isOn = true;
 		}
+
 	}
 
 	public void equip(int slotNumber) {

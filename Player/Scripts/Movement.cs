@@ -18,6 +18,16 @@ public class Movement : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 	
+		//lets see if the player is in the BuildingBuilding? if so, set default values and remove gravity!
+		if (Application.loadedLevel == 2){
+
+			GameObject Player = GameObject.Find("Player");
+			this.GetComponent<Rigidbody2D>().isKinematic = true;
+			Vector3 position = new Vector3(-4f,-3f,0);
+			this.transform.position = position;
+
+		}
+
 
 		Vector2 speed = new Vector2 (this.GetComponent<Rigidbody2D> ().velocity.x, this.GetComponent<Rigidbody2D> ().velocity.y);
 
