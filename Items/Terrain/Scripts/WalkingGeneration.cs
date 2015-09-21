@@ -7,6 +7,7 @@ public class WalkingGeneration : CreateMap {
 
 	public static float cameraSizeX = 60, cameraSizeY = 80;
 	public static int bufferSize = 2;
+	
 
 	// Should on;y be called once
 	public static void setValues() {

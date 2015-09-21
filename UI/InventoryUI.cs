@@ -63,6 +63,8 @@ public class InventoryUI : MonoBehaviour {
 			selected.isOn = true;
 		}
 
+
+
 	}
 
 	public void equip(int slotNumber) {

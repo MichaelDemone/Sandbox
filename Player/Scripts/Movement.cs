@@ -23,7 +23,9 @@ public class Movement : MonoBehaviour {
 
 			GameObject Player = GameObject.Find("Player");
 			this.GetComponent<Rigidbody2D>().isKinematic = true;
-			Vector3 position = new Vector3(-4f,-3f,0);
+			Vector3 position = new Vector3(4.5f,6f,0);
+			Vector3 scale = new Vector3(4,4,1);
+			this.transform.localScale = scale;
 			this.transform.position = position;
 
 		}
