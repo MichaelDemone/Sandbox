@@ -23,32 +23,50 @@ public class InventoryUI : MonoBehaviour {
 
 		// Initializing images
 		ArrayList imagesTemp = new ArrayList ();
+		ArrayList imageNumsTemp = new ArrayList ();
+
 		GameObject image;
+		GameObject imageNum;
+
+		image = GameObject.Find("Inventory Image (0)");
+		image.GetComponent<RectTransform> ().sizeDelta.Set (24, 24);
+		float width = image.GetComponent<RectTransform> ().rect.width;
+		float spacing = (GetComponent<RectTransform>().sizeDelta.x - image.GetComponent<RectTransform>().sizeDelta.x * 9) / 9f - 1f;
+
+		float lastY = image.GetComponent<RectTransform>().localPosition.y;
+		float lastX = image.GetComponent<RectTransform>().localPosition.x;
+		float firstX = lastX;
+
 		for (int i = 0;;i++) {
 			image = GameObject.Find("Inventory Image (" + i + ")");
+			imageNum = GameObject.Find("Item Number (" + i + ")");
+
 			if(image != null) {
 				imagesTemp.Add(image);
+				imageNumsTemp.Add (imageNum);
+				image.GetComponent<RectTransform> ().sizeDelta = new Vector2 (24, 24);
+				image.GetComponent<RectTransform>().localPosition = new Vector3(lastX, lastY,0);
+				imageNum.transform.SetParent(image.transform);
+				imageNum.transform.localPosition = new Vector2(6,-6);
+				imageNum.GetComponent<RectTransform>().sizeDelta = new Vector2(12,12);
 			}
 			else
 				break;
+
+			lastX += width + spacing;
+
+			if((i+1) % 9 == 0) {
+				lastY -= width + spacing;
+				lastX = firstX;
+			}
+
+
+
 		}
 		
 		images = new GameObject[imagesTemp.Count];
 		for (int i = 0; i < imagesTemp.Count; i++) {
 			images[i] = (GameObject) imagesTemp.ToArray()[i];
-		}
-		
-		// Initialize image numbers
-		ArrayList imageNumsTemp = new ArrayList ();
-		GameObject imageNum;
-		for (int i = 0;;i++) {
-			imageNum = GameObject.Find("Item Number (" + i + ")");
-			if(imageNum != null) {
-				imageNumsTemp.Add(imageNum);
-				imageNum.GetComponent<Text>().text = "";
-			}
-			else
-				break;
 		}
 		
 		imageNums = new GameObject[imageNumsTemp.Count];
@@ -134,7 +152,7 @@ public class InventoryUI : MonoBehaviour {
 				images[i].GetComponent<Image>().sprite = blank;
 
 			if(Inventory.itemAmount[i] != 0) {
-				if(Inventory.itemAmount[i] == 1)
+				if(Inventory.itemAmount[i] != 1)
 					imageNums[i].GetComponent<Text>().text = Inventory.itemAmount[i] + "";
 				else
 					imageNums[i].GetComponent<Text>().text = "";

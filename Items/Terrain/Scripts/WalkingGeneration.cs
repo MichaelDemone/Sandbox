@@ -8,8 +8,9 @@ public class WalkingGeneration : CreateMap {
 	public static float cameraSizeX = 60, cameraSizeY = 80;
 	public static int bufferSize = 2;
 
-	// Should on;y be called once
+	// Should only be called once
 	public static void setValues() {
+
 		lastXTransition = Mathf.RoundToInt(player.transform.position.x);
 		lastYTransition = Mathf.RoundToInt(player.transform.position.y);
 		
@@ -64,7 +65,7 @@ public class WalkingGeneration : CreateMap {
 		Collider2D[] collidersY;
 		Collider2D[] collidersX;
 		
-		/*
+		/* DEBUGGING
 		Debug.DrawLine (new Vector2 (xPos + heightDestroyBox / 2, yPos + distToDestroyBox + widthDestroyBox), new Vector2(xPos - heightDestroyBox/2, yPos + distToDestroyBox));
 		Debug.DrawLine (new Vector2(xPos + heightDestroyBox/2, yPos - distToDestroyBox - widthDestroyBox), new Vector2(xPos - heightDestroyBox/2, yPos - distToDestroyBox));
 		Debug.DrawLine (new Vector2(xPos + distToDestroyBox, yPos - heightDestroyBox/2), new Vector2(xPos + distToDestroyBox + widthDestroyBox, yPos + heightDestroyBox/2));
@@ -195,7 +196,7 @@ public class WalkingGeneration : CreateMap {
 
 		Vector3 pos = new Vector3 (i, j, k);
 		Collider2D col;
-		if ((col = Physics2D.OverlapPoint (pos, -1, k-0.1f, k+0.1f)) != null && !col.isTrigger) {
+		if ((col = Physics2D.OverlapPoint (pos, -1, k-0.1f, k+0.1f)) != null) {
 
 			return;
 		}
