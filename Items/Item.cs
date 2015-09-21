@@ -64,6 +64,9 @@ public class Item : MonoBehaviour{
 
 	public void drop() {
 
+		if(invName == null)
+			return;
+
 		GameObject collectable = (GameObject)Dictionary.get ("Collectable");
 		
 		collectable.GetComponent<SpriteRenderer> ().sprite = GetComponent<SpriteRenderer> ().sprite;

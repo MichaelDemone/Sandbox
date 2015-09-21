@@ -7,6 +7,7 @@ public class WalkingGeneration : CreateMap {
 
 	public static float cameraSizeX = 60, cameraSizeY = 80;
 	public static int bufferSize = 2;
+	
 
 	// Should only be called once
 	public static void setValues() {
@@ -203,9 +204,11 @@ public class WalkingGeneration : CreateMap {
 
 		string tile = (string) map[pos];
 		if(tile != null) {
+
 			GameObject obj = (GameObject) GameObject.Instantiate(Dictionary.get (tile), pos, Quaternion.identity);
 			obj.transform.SetParent(ground.transform);
 		}
+
 	}
 
 	public static void unloadPeice(GameObject gm) {
