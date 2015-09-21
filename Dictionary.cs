@@ -8,6 +8,7 @@ public class Dictionary : MonoBehaviour {
 
 	//public GameObject dirt, copper, collectable, dirtWGrass, sand, leaves, log, torch, light, rock, copperOre, coalOre, ironOre, titaniumOre, goldOre, platinumOre, coal, iron, titanium, gold, platinum;
 	public GameObject collectable;
+	
 
 	// Use this for initialization
 	void Start () {
@@ -51,7 +52,7 @@ public class Dictionary : MonoBehaviour {
 
 	public void create(Block b){
 	
-		GameObject block = Instantiate(Resources.Load<GameObject>("Block"));
+		GameObject block = (GameObject) Instantiate(Resources.Load<GameObject>("Block"), new Vector3(0,2000,0), Quaternion.identity);
 
 		block.GetComponent<SpriteRenderer>().sprite = Resources.Load<Sprite>("Natural Sprites/" + b.sprite);
 

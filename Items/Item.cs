@@ -64,7 +64,7 @@ public class Item : MonoBehaviour{
 
 	public void drop() {
 
-		if(invName == null)
+		if(invName.Equals(""))
 			return;
 
 		GameObject collectable = (GameObject)Dictionary.get ("Collectable");
