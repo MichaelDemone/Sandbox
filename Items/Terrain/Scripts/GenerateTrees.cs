@@ -14,7 +14,7 @@ public class GenerateTrees {
 				if (currentTile != null){
 					if (currentTile.Equals("DirtWGrass")  &&  counter > 5){
 						if((int) Random.Range (-1.95f, biomeProb) == 1){
-							placeTrees(new Vector3(i,j+1,0));
+							placeTrees(new Vector3(i,j+1, CreateMap.STANDARD_LAYER));
 							counter = 0;
 						}
 					}else if (currentTile.Equals ("DirtWGrass")){
@@ -39,8 +39,8 @@ public class GenerateTrees {
 		CreateMap.map.Add(new Vector3(location.x+2,location.y+3,location.z), "Leaves");
 		CreateMap.map.Add(new Vector3(location.x-3,location.y+3,location.z), "Leaves");
 		CreateMap.map.Add(new Vector3(location.x+3,location.y+3,location.z), "Leaves");
-		CreateMap.map.Add(new Vector3(location.x,location.y+3,location.z-1), "Leaves");
-		CreateMap.map.Add(new Vector3(location.x,location.y+4,location.z-1), "Leaves");
+		CreateMap.map.Add(new Vector3(location.x,location.y+3,CreateMap.GRASS_LAYER), "Leaves");
+		CreateMap.map.Add(new Vector3(location.x,location.y+4,CreateMap.GRASS_LAYER), "Leaves");
 		CreateMap.map.Add(new Vector3(location.x-1,location.y+4,location.z), "Leaves");
 		CreateMap.map.Add(new Vector3(location.x+1,location.y+4,location.z), "Leaves");
 		CreateMap.map.Add(new Vector3(location.x-2,location.y+4,location.z), "Leaves");

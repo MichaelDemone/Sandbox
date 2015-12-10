@@ -54,42 +54,7 @@ public class Inventory : MonoBehaviour {
 		}
 
 		if (Input.GetMouseButton (1) && equippedIsForPlacing && Time.time - placeTime > 0.25) {
-
-			Vector3 pos = Input.mousePosition;
-			pos = Camera.main.ScreenToWorldPoint(pos);
-			pos = new Vector2(Mathf.RoundToInt(pos.x), Mathf.RoundToInt(pos.y));
-
-			Collider2D hit = Physics2D.OverlapPoint(pos);
-
-			if(hit == null) {
-
-				// Place object
-				GameObject go = (GameObject) GameObject.Instantiate (equipped, pos, Quaternion.identity);
-
-				// Add to map of place
-				CreateMap.map.Add (pos, go.GetComponent<Item>().name);
-
-				itemAmount[equippedNum] -= 1;
-				inventoryUI.changeNumOfItems(equippedNum, itemAmount[equippedNum]);
-
-				if(itemAmount[equippedNum] == 0) {
-
-					if (Inventory.equipped != null && Inventory.equipped.GetComponent<Item> ().name.Equals ("Torch")) {
-						Destroy(GameObject.Find ("Player").GetComponentInChildren<Light>().gameObject);
-					}
-
-					inventory[equippedNum] = null;
-					equipped = null;
-					equippedIsForPlacing = false;
-					equippedNum = -1;
-				}
-
-				if(go.CompareTag("Tile")) {
-					go.transform.parent = tileParent.transform;
-				} else if(go.CompareTag("Light")) {
-					go.GetComponentInChildren<LightSource>().lightUp();
-				}
-			}
+			placeItem();
 		}
 	}
 
@@ -157,5 +122,48 @@ public class Inventory : MonoBehaviour {
 
 			return true;
 		}
+	}
+
+	private void placeItem() {
+
+		Vector3 pos = Input.mousePosition;
+		pos.z = 25;
+		pos = Camera.main.ScreenToWorldPoint(pos);
+		pos = new Vector2(Mathf.RoundToInt(pos.x), Mathf.RoundToInt(pos.y));
+		
+		Collider2D hit = Physics2D.OverlapPoint(pos);
+
+		if (hit != null && !hit.isTrigger) {
+			return;
+		}
+
+		// Place object
+		GameObject go = (GameObject) GameObject.Instantiate (equipped, pos, Quaternion.identity);
+		
+		// Add to map of place
+		CreateMap.map.Add (pos, go.GetComponent<Item>().name);
+		
+		itemAmount[equippedNum] -= 1;
+		inventoryUI.changeNumOfItems(equippedNum, itemAmount[equippedNum]);
+		
+		if(itemAmount[equippedNum] == 0) removeItem();
+		
+		
+		if(go.CompareTag("Tile")) {
+			go.transform.parent = tileParent.transform;
+		} else if(go.CompareTag("Light")) {
+			go.GetComponentInChildren<LightSource>().lightUp();
+		}
+	}
+
+	private void removeItem() {
+		if (Inventory.equipped != null && Inventory.equipped.GetComponent<Item> ().name.Equals ("Torch")) {
+			Destroy(GameObject.Find ("Player").GetComponentInChildren<Light>().gameObject);
+		}
+		
+		inventory[equippedNum] = null;
+		equipped = null;
+		equippedIsForPlacing = false;
+		equippedNum = -1;
 	}
 }

@@ -20,7 +20,8 @@ public class Item : MonoBehaviour{
 
 		// If this is a recently placed tile, check the distance between each light source,
 		// and if that distance is within the light up distance, light up!
-		if (CompareTag ("Tile")) {
+		if (CompareTag ("Tile") && Tweakables.darknessActivated) {
+			GetComponent<SpriteRenderer>().color = Color.black;
 			foreach(GameObject go in LightSource.lightSources) {
 				if((go.transform.position - transform.position).magnitude < go.GetComponent<LightSource>().blockRange) {
 					go.GetComponent<LightSource>().lightUp();
@@ -54,7 +55,7 @@ public class Item : MonoBehaviour{
 		}
 
 		if (CompareTag("Light")) {
-			GameObject lightPrefab = Dictionary.get("Light");
+			GameObject lightPrefab = Dictionary.get("Torch").GetComponentInChildren<Light>().gameObject;
 			GameObject light = (GameObject) GameObject.Instantiate(lightPrefab);
 			light.transform.SetParent(GameObject.Find("Player").transform);
 			light.transform.localPosition = new Vector3(0.1f,0,-1);

@@ -15,7 +15,10 @@ public class LightSource : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-
+		if (!Tweakables.darknessActivated) {
+			enabled = false;
+			return;
+		}
 		if (lightSources == null) {
 			lightSources = new ArrayList ();
 			lightSources.Add (gameObject);
@@ -61,7 +64,8 @@ public class LightSource : MonoBehaviour {
 
 	// When disabled, make the blocks around this light not light
 	void OnDisable() {
-
+		if (lightSources == null)
+			return;
 		lightSources.Remove (gameObject);
 
 		// Unilluminate all the tiles around the light

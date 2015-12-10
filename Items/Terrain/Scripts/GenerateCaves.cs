@@ -10,18 +10,17 @@ public class GenerateCaves : CreateMap {
 			//int xPos = (int) Random.Range(minX, maxX);
 			int xPos = (int) Random.Range (-100, 100);
 			int yPos = (int) Random.Range(minY, maxY);
-			Vector2 position = new Vector2(xPos, yPos);
 			int radius = Random.Range(2,10);
 
 			for(int i = xPos - radius, num = 0; i < xPos; i += distanceBetweenLoads, num++) {
 				for(int j = yPos - num; j <= yPos + num; j += distanceBetweenLoads) {
-					CreateMap.map.Remove(new Vector3(i,j,0));
+					CreateMap.map.Remove(new Vector3(i,j,STANDARD_LAYER));
 				}
 			}
 
 			for(int i = xPos, num = radius; i <= xPos + radius; i += distanceBetweenLoads, num--) {
 				for(int j = yPos - num; j <= yPos + num; j += distanceBetweenLoads) {
-					CreateMap.map.Remove(new Vector3(i,j,0));
+					CreateMap.map.Remove(new Vector3(i,j,STANDARD_LAYER));
 				}
 			}
 

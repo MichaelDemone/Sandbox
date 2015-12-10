@@ -6,6 +6,7 @@ public class Mining : MonoBehaviour {
 	public int strength;
 	public Sprite[] breakingStages;
 	public float timeBetweenBreaking;
+	public bool wall;
 
 
 	private float miningDistance;
@@ -31,7 +32,7 @@ public class Mining : MonoBehaviour {
 	
 	void OnMouseOver() {
 
-		if (Input.GetMouseButton (0)) {
+		if (Input.GetMouseButton (0) && !wall) {
 
 			Vector3 vectorDifference = this.transform.position - player.transform.position;
 

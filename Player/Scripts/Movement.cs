@@ -21,7 +21,6 @@ public class Movement : MonoBehaviour {
 		//lets see if the player is in the BuildingBuilding? if so, set default values and remove gravity!
 		if (Application.loadedLevel == 2){
 
-			GameObject Player = GameObject.Find("Player");
 			this.GetComponent<Rigidbody2D>().isKinematic = true;
 			Vector3 position = new Vector3(4.5f,6f,0);
 			Vector3 scale = new Vector3(4,4,1);

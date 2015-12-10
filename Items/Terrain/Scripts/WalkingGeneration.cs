@@ -25,6 +25,7 @@ public class WalkingGeneration : CreateMap {
 
 	// Should be called in an update
 	public static void checkIfNeedsLoading() {
+
 		int xPos = Mathf.RoundToInt (player.transform.position.x);
 		int yPos = Mathf.RoundToInt (player.transform.position.y);
 		bool goingRight = player.GetComponent<Rigidbody2D>().velocity.x > 0;
@@ -46,7 +47,7 @@ public class WalkingGeneration : CreateMap {
 			}
 		}
 		
-		// Check if player should load in the X direction
+		// Check if player should load in the Y direction
 		if (yPos > lastYTransition + distanceBetweenLoads || yPos < lastYTransition - distanceBetweenLoads) {
 			
 			// Load peices above you 
@@ -90,11 +91,11 @@ public class WalkingGeneration : CreateMap {
 		
 		foreach (Collider2D col in collidersX) {
 			if(col.CompareTag("Tile"))
-				Destroy(col.gameObject);
+				Dictionary.remove(col.gameObject);
 		}
 		foreach (Collider2D col in collidersY) {
 			if(col.CompareTag("Tile"))
-				Destroy(col.gameObject);
+				Dictionary.remove(col.gameObject);
 		}
 	}
 
@@ -142,17 +143,17 @@ public class WalkingGeneration : CreateMap {
 			if (goingRight) {
 				for (float i = loadingXPosition; i <= loadXTo; i += widthOfGroundPiece) {
 					for (float j = loadingYPosition; j < loadYTo; j += widthOfGroundPiece) {
-						loadPeice (i, j, 0);
-						loadPeice (i, j, -1);
-						loadPeice (i, j, 1);
+						loadPeice (i, j, STANDARD_LAYER);
+						loadPeice (i, j, WALL_LAYER);
+						loadPeice (i, j, GRASS_LAYER);
 					}
 				}
 			} else {
 				for (float i = loadingXPosition; i >= loadXTo; i -= widthOfGroundPiece) {
 					for (float j = loadingYPosition; j < loadYTo; j += widthOfGroundPiece) {
-						loadPeice (i, j, 0);
-						loadPeice (i, j, -1);
-						loadPeice (i, j, 1);
+						loadPeice (i, j, STANDARD_LAYER);
+						loadPeice (i, j, WALL_LAYER);
+						loadPeice (i, j, GRASS_LAYER);
 					}
 				}
 			}
@@ -176,17 +177,17 @@ public class WalkingGeneration : CreateMap {
 			if (goingUp) {
 				for (float j = loadingYPosition; j < loadYTo; j += widthOfGroundPiece) {
 					for (float i = loadingXPosition; i <= loadXTo; i += widthOfGroundPiece) {
-						loadPeice (i, j, 0);
-						loadPeice (i, j, -1);
-						loadPeice (i, j, 1);
+						loadPeice (i, j, STANDARD_LAYER);
+						loadPeice (i, j, WALL_LAYER);
+						loadPeice (i, j, GRASS_LAYER);
 					}
 				}
 			} else {
 				for (float j = loadingYPosition; j > loadYTo; j -= widthOfGroundPiece) {
 					for (float i = loadingXPosition; i <= loadXTo; i += widthOfGroundPiece) {
-						loadPeice (i, j, 0);
-						loadPeice (i, j, -1);
-						loadPeice (i, j, 1);
+						loadPeice (i, j, STANDARD_LAYER);
+						loadPeice (i, j, WALL_LAYER);
+						loadPeice (i, j, GRASS_LAYER);
 					}
 				}
 			}
@@ -196,19 +197,23 @@ public class WalkingGeneration : CreateMap {
 	public static void loadPeice(float i, float j, float k) {
 
 		Vector3 pos = new Vector3 (i, j, k);
-		Collider2D col;
-		if ((col = Physics2D.OverlapPoint (pos, -1, k-0.1f, k+0.1f)) != null) {
 
+		if (Physics2D.OverlapPoint (pos, -1, k-0.01f, k+0.01f) != null) {
 			return;
 		}
 
 		string tile = (string) map[pos];
 		if(tile != null) {
+            GameObject obj = Dictionary.get(tile);
 
-			GameObject obj = (GameObject) GameObject.Instantiate(Dictionary.get (tile), pos, Quaternion.identity);
-			obj.transform.SetParent(ground.transform);
+            if(!obj.name.Equals("Block(Clone)")) {
+                obj.transform.position = pos;
+            } else {
+                obj = (GameObject) GameObject.Instantiate(obj, pos, Quaternion.identity);
+                obj.transform.SetParent(ground.transform);
+                obj.isStatic = false;
+            }
 		}
-
 	}
 
 	public static void unloadPeice(GameObject gm) {
@@ -221,7 +226,7 @@ public class WalkingGeneration : CreateMap {
 				return;
 		}
 		map.Add (pos, script.name);
-		GameObject.Destroy (gm);
+		Dictionary.remove(gm);
 	}
 
 	// Saves point to the map
@@ -236,7 +241,7 @@ public class WalkingGeneration : CreateMap {
 		Item script;
 		if(box != null && (script = box.gameObject.GetComponent<Item>()) != null) {
 			map.Add(pos, script.name);
-			GameObject.Destroy(box.gameObject);
+			Dictionary.remove(box.gameObject);
 		}
 	}
 }

@@ -5,6 +5,12 @@ public class CreateMap : MonoBehaviour {
 	
 	public static Hashtable map;//the map
 	public static int seed = 1234;
+
+	public const float GRASS_LAYER = -0.1f;
+	public const float WALL_LAYER = 0.1f;
+	public const float STANDARD_LAYER = 0;
+	public const float BACKGROUND_LAYER = 20;
+
 	
 	protected static GameObject player, ground;
 	protected static float maxY = 0, minY = 0;
@@ -45,9 +51,11 @@ public class CreateMap : MonoBehaviour {
 				previousYPosR += selectDirection();
 				
 				for (float j = -20; j < previousYPosR; j += widthOfGroundPiece) {
-					position = new Vector3 (i, j, 0);
+					position = new Vector3 (i, j, WALL_LAYER);
+					map.Add (position, "Wall");
+					position.z = STANDARD_LAYER;
 					map.Add (position, "Rock");
-					
+
 				}
 
 				Vector3 position1 = position;
@@ -71,6 +79,18 @@ public class CreateMap : MonoBehaviour {
 				map.Add (position3, "Dirt");
 				map.Add (position4, "Dirt");
 				map.Add (position, "DirtWGrass");
+
+				position.z = WALL_LAYER;
+				position1.z = WALL_LAYER;
+				position2.z = WALL_LAYER;
+				position3.z = WALL_LAYER;
+				position4.z = WALL_LAYER;
+
+				map.Remove (position);
+				map.Remove (position1);
+				map.Remove (position2);
+				map.Remove (position3);
+				map.Remove (position4);
 
 				// Set minimum and maximum y value
 				if (previousYPosR > maxY) maxY = previousYPosR;
@@ -100,9 +120,9 @@ public class CreateMap : MonoBehaviour {
 
 		for (float i = loadingLeft; i < loadingRight; i += widthOfGroundPiece){
 			for (float j = bottomLoad; j < topLoad; j += widthOfGroundPiece){
-				WalkingGeneration.loadPeice(i,j,0);
-				WalkingGeneration.loadPeice(i,j,-1);
-				WalkingGeneration.loadPeice(i,j,1);
+				WalkingGeneration.loadPeice(i,j, STANDARD_LAYER);
+				WalkingGeneration.loadPeice(i,j, WALL_LAYER);
+				WalkingGeneration.loadPeice(i,j, GRASS_LAYER);
 			}
 		}
 	}
