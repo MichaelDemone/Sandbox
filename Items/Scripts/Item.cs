@@ -3,16 +3,11 @@ using System.Collections;
 
 public class Item : MonoBehaviour{
 
-	// General
-	public bool item, weapon;
-	public int maxStackSize, numberOfDrops;
-	public Sprite equipped, inventorySprite;
+    // General
+	public int maxStackSize, numberOfDrops, strength;
+	public Sprite inventorySprite;
 	public new string name;
 	public string invName;
-
-
-	// Weapons
-	public int strength;
 
 	// Time
 
@@ -46,13 +41,6 @@ public class Item : MonoBehaviour{
 		}
 
 		Inventory.equipped = gameObject;
-		if (item) {
-			//Inventory.hitting = weapon;
-			Inventory.equippedIsForPlacing = true;
-		} else if (weapon) {
-			//Inventory.hitting = weapon;
-			Inventory.equippedIsForPlacing = true;
-		}
 
 		if (CompareTag("Light")) {
 			GameObject lightPrefab = Dictionary.get("Torch").GetComponentInChildren<Light>().gameObject;
