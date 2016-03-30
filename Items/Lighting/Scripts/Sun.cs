@@ -9,7 +9,7 @@ public class Sun : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		RenderSettings.ambientIntensity = ambientIntensity;
+		//RenderSettings.ambientIntensity = ambientIntensity;
 	}
 	
 	// Update is called once per frame

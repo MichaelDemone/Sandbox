@@ -5,103 +5,99 @@ public class BlobMovement : MonoBehaviour {
 
 	public float speedX, speedY, hitForce;
 
-	private float lastCallTime, jumpTime;
 	private GameObject player;
-	private Vector3 previousPosition;
+
 	private bool goingRight = false, jumping = false, onSomething = false;
 
+    private Rigidbody2D r;
 
+    private float recoverTime;
 	// Use this for initialization
 	void Start () {
-		lastCallTime = Time.time;
 		player = GameObject.Find ("Player");
-		previousPosition = transform.position;
-	}
-	
-	// Update is called once per frame
-	void Update () {
+        r = GetComponent<Rigidbody2D>();
+        recoverTime = Time.time;
+        StartCoroutine(runAI());
 
-		if (!jumping && !onSomething) {
-			return;
-		}
-
-		if (!jumping && Time.time - lastCallTime > 1) {
-			previousPosition = approachPlayer (gameObject, player, previousPosition);
-			lastCallTime = Time.time;
-		} else if (!jumping) {
-
-			if(goingRight) {
-				Vector2 vel = GetComponent<Rigidbody2D>().velocity;
-				GetComponent<Rigidbody2D>().velocity = new Vector2 (speedX, vel.y);
-			}
-			else {
-				Vector2 vel = GetComponent<Rigidbody2D>().velocity;
-				GetComponent<Rigidbody2D>().velocity = new Vector2 (-speedX, vel.y);
-			}
-		}
-
-		if (jumping) {
-
-			Vector2 vel = new Vector2(0,5);
-			if(Time.time - jumpTime < 0.15f) {
-				vel.x = 0;
-				vel.y = speedY;
-				GetComponent<Rigidbody2D>().velocity = vel;
-				return;
-			}
-
-			if(goingRight) {
-				vel.x = speedX; 
-			}
-			else {
-				vel.x = -speedX;
-			}
-
-			GetComponent<Rigidbody2D>().velocity = vel;
-
-			if(Time.time - jumpTime > 0.2f)
-				jumping = false;
-			return;
-		}
-
-		// Possibly implement super jump to get out of holes
 	}
 
-	public Vector2 approachPlayer(GameObject enemy, GameObject player, Vector3 previousEnemyPosition) {
+    void Update() {
+        if (Time.time > recoverTime) {
+            int mod = goingRight ? 1 : -1;
+            r.velocity = new Vector2(mod*speedX, r.velocity.y);
+        }
+    }
 
-		Vector2 velocity = new Vector2 ();
-		Vector3 enemyPos = enemy.transform.position;
-		// Find what diretion to go
-		Vector2 spaceBetween = enemyPos - player.transform.position;
+    IEnumerator runAI() {
+        yield return new WaitForSeconds(Random.value*Tweakables.AI_DELAY);
 
-		// Go right
-		if (spaceBetween.x < 0) {
-			velocity.x = speedX;
-			goingRight = true;
-		}
-		// Go left
-		else { 
-			velocity.x = -speedX;
-			goingRight = false;
-		}
+        while (true) {
 
-		if ((previousEnemyPosition - enemyPos).magnitude < 1) {
-			jumping = true;
-			jumpTime = Time.time;
-		} else
-			jumping = false;
+            // Do whatcha gotta do
+            intelligence();
 
-		enemy.GetComponent<Rigidbody2D> ().velocity = velocity;
+            //Check player distance
+            bool nearPlayer = (player.transform.position - transform.position).magnitude < 5;
 
-		return enemyPos;
-	}
+            // Check time until next delay
+            float delay = Tweakables.AI_DELAY;
 
-	void OnTriggerEnter2D(Collider2D other) {
-		onSomething = true;
+            delay = nearPlayer ? delay /=2 : delay *=2;
+
+            yield return new WaitForSeconds(delay);
+        }
+    }
+
+    void intelligence() {
+
+        // Find and approach player
+        Vector3 pos = transform.position;
+
+        // Find what diretion to go
+        Vector2 spaceBetween = pos - player.transform.position;
+        goingRight = spaceBetween.x < 0;
+
+        // Check to see if it is running into a wall
+        bool shouldJump = checkHittingWall();
+
+        if (shouldJump) {
+            r.velocity = new Vector2(0, speedY);
+        }
+
+        // Possibly implement super jump to get out of holes
+    }
+
+    
+    public void hit(int speedX, int damage, int stunTime) {
+
+        if (recoverTime > Time.time)
+            return;
+
+        r.velocity = new Vector2(speedX, r.velocity.y);
+        recoverTime = stunTime + Time.time;
+        GetComponent<EnemyStats>().health -= damage;
+        if(GetComponent<EnemyStats>().health <= 0) {
+            Destroy(this.gameObject, 1);
+        }
+    }
+
+    public bool checkHittingWall() {
+        Vector2 p = transform.position;
+
+        int mod = goingRight ? 1 : -1;
+
+        Collider2D col = Physics2D.OverlapCircle(new Vector2(p.x+mod, p.y), 0.2f);
+
+        return col != null && !col.isTrigger;
+    }
+
+    /*********** TRIGGERS FOR SEEING IF IT'S ON SOMETHING ************************/
+    void OnTriggerEnter2D(Collider2D other) {
+        onSomething = !other.isTrigger || onSomething;
 	}
 
 	void OnTriggerStay2D(Collider2D other) {
-		onSomething = true;
+		onSomething = !other.isTrigger || onSomething;
 	}
 
 	void OnTriggerExit2D(Collider2D other) {
@@ -109,16 +105,10 @@ public class BlobMovement : MonoBehaviour {
 	}
 
 	void OnCollisionEnter2D(Collision2D other) {
-		onSomething = true;
 		if(other.collider.CompareTag("Player")) {
-			other.gameObject.GetComponent<Rigidbody2D>().AddForce(new Vector2 (hitForce, 0));
+            int mod = goingRight ? 1 : -1;
+            
+            player.GetComponent<Movement>().hit(mod*speedX*2, 0.5f);
 		}
 	}
-	
-	void OnCollisionStay2D(Collision2D other) {
-		onSomething = true;
-		if(other.collider.CompareTag("Player")) {
-		}
-	}
-
 }

@@ -14,8 +14,8 @@ public class Dictionary : MonoBehaviour {
 	void Start () {
 
 		dictionary = new Hashtable();
-		// Adding terrain
-		
+
+        // Adding terrain
 		create (new Block("Dirt"));
 		
 		Block dirtWGrass = new Block("DirtWGrass");
@@ -29,6 +29,8 @@ public class Dictionary : MonoBehaviour {
 
 		Block coalOre = new Block("CoalOre");
 		coalOre.dropName = "Coal";
+        coalOre.strength = 2;
+        
 		create(coalOre);
 		
 		create(new Block("Rock"));
@@ -67,12 +69,9 @@ public class Dictionary : MonoBehaviour {
 
 
 		Item it = block.GetComponent<Item>();
-		it.item = b.item;
 		it.invName = b.dropName;
-		it.weapon = b.weapon;
 		it.maxStackSize = b.maxStackSize;
 		it.numberOfDrops = b.numberOfDrops;
-		it.equipped = Resources.Load<Sprite>("Natural Sprites/" + b.equippedSprite);
 		it.inventorySprite = Resources.Load<Sprite>("Natural Sprites/" + b.inventorySprite);
 		it.name = b.name;
 		it.strength = b.strength;
@@ -80,6 +79,10 @@ public class Dictionary : MonoBehaviour {
 		Mining mi = block.GetComponent<Mining>();
 		mi.strength = it.strength;
 		mi.wall = b.isWall;
+
+        if(b.isWall) {
+            block.GetComponent<SpriteRenderer>().material = Resources.Load<Material>("Dim");
+        }
 
 		block.GetComponent<Collider2D>().isTrigger = b.isTrigger || b.isWall;
 
@@ -92,24 +95,16 @@ public class Dictionary : MonoBehaviour {
 		Item it = light.GetComponent<Item> ();
 		it.name = l.name;
 		it.invName = l.name;
-		it.item = true;
-		it.weapon = false;
 		it.maxStackSize = l.maxStack;
 		it.numberOfDrops = 1;
-		it.equipped = Resources.Load<Sprite> ("Lighting/" + l.sprite);
-		it.inventorySprite = it.equipped;
-
-		LightSource ls = light.GetComponentInChildren<LightSource> ();
-		ls.blockRange = l.blockRange;
-		ls.brightness = l.brightness;
-		ls.range = l.range;
+		it.inventorySprite = Resources.Load<Sprite>("Lighting/" + l.sprite);
 
 		dictionary.Add (l.name, light);
 	}
 
-    static Queue dirt = new Queue();
-    static Queue wall = new Queue();
-    static Queue rock = new Queue();
+    //static Queue dirt = new Queue();
+    //static Queue wall = new Queue();
+    //static Queue rock = new Queue();
 
     public static GameObject get(string name) {
         /*
@@ -138,6 +133,7 @@ public class Dictionary : MonoBehaviour {
         //}
         
     }
+
 	//STRCUTS FOR SHITTY NATURAL PREFABS
 
 	public struct Block{
@@ -145,6 +141,8 @@ public class Dictionary : MonoBehaviour {
 		public string inventorySprite;
 		public string equippedSprite;
 		public int strength;
+        public int brittleness;
+        public int weight;
 		public bool item;
 		public bool weapon;
 		public int maxStackSize;
@@ -160,6 +158,8 @@ public class Dictionary : MonoBehaviour {
 			this.inventorySprite = name;
 			this.equippedSprite = name;
 			this.strength = 1;
+            this.brittleness = 1;
+            this.weight = 1;
 			this.item = true;
 			this.weapon = false;
 			this.maxStackSize = 99;

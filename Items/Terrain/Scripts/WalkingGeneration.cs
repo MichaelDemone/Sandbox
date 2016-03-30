@@ -5,7 +5,7 @@ public class WalkingGeneration : CreateMap {
 	
 	private static float yMin, yMax, xMin, xMax;
 
-	public static float cameraSizeX = 60, cameraSizeY = 80;
+	public static float cameraSizeX = 100, cameraSizeY = 80;
 	public static int bufferSize = 2;
 	
 
@@ -15,8 +15,8 @@ public class WalkingGeneration : CreateMap {
 		lastXTransition = Mathf.RoundToInt(player.transform.position.x);
 		lastYTransition = Mathf.RoundToInt(player.transform.position.y);
 		
-		cameraSizeX = 2*Camera.main.orthographicSize + 5;
-		cameraSizeY = Camera.main.orthographicSize + 10;
+		cameraSizeX = (Camera.main.orthographicSize*Camera.main.aspect);
+		cameraSizeY = Camera.main.orthographicSize;
 		
 		distToDestroyBox = cameraSizeX + 2;
 		heightDestroyBox = distToDestroyBox * 2;

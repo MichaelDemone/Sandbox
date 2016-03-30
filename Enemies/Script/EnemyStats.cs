@@ -1,14 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Tweakables : MonoBehaviour {
+public class EnemyStats : MonoBehaviour {
 
-	public static bool darknessActivated = true;
-	public bool darkness_activated;
+    public float health; 
 
 	// Use this for initialization
 	void Start () {
-		darknessActivated = darkness_activated;
+        health *= Tweakables.scale;
 	}
 	
 	// Update is called once per frame

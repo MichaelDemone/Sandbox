@@ -8,16 +8,6 @@ public class Collect: MonoBehaviour {
 
 	private bool registered = false;
 	bool beingDestroyed = false;
-
-	// Use this for initialization
-	void Start () {
-
-	}
-	
-	// Update is called once per frame
-	void Update () {
-
-	}
 	
 	void OnTriggerEnter2D(Collider2D other) {
 		if (other.CompareTag ("Player") && !registered) {
@@ -33,12 +23,14 @@ public class Collect: MonoBehaviour {
 			}
 		}
 	}
+
 	void OnTriggerStay2D(Collider2D other) {
 		if (other.CompareTag ("Player") && !registered) {
 			registered = true;
 			Inventory.addItem(objectThisRepresents, gameObject);
 		}
 	}
+
 	void BeingDestroyed() {
 		beingDestroyed = true;
 	}
